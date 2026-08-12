@@ -7,4 +7,6 @@ __pycache__/
 .streamlit/secrets.toml
 exercise-output/
 tmp/
+*.inspect.ndjson
 data/private_assessments/
+video/recordings/

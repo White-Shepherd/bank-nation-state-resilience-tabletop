@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="180" viewBox="0 0 760 180" role="img" aria-labelledby="title desc">
+  <title id="title">Continuum Resilience monochrome wordmark</title>
+  <desc id="desc">Single-color Continuum Resilience wordmark in dark navy.</desc>
+  <rect width="760" height="180" fill="#FFFFFF"/>
+  <rect x="48" y="42" width="8" height="96" fill="#102A43"/>
+  <text x="84" y="91" font-family="Aptos,Arial,sans-serif" font-size="52" font-weight="700" letter-spacing="2" fill="#102A43">CONTINUUM</text>
+  <text x="86" y="132" font-family="Aptos,Arial,sans-serif" font-size="27" font-weight="600" letter-spacing="7" fill="#102A43">RESILIENCE</text>
+</svg>

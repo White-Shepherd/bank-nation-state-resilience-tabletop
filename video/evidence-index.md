@@ -1,0 +1,12 @@
+# Video evidence index
+
+| Claim | Application behavior | Synthetic input | Analysis rule | Generated output | Supporting code or documentation | Qualification |
+| --- | --- | --- | --- | --- | --- | --- |
+| Services are the analysis starting point | Critical-service checkpoint presents owners, purpose, and criticality | `data/synthetic_assessments/harbor-ridge-2026.json` | Direct record display | Demo checkpoint 2 | `src/harbor_resilience/demo.py`; `docs/critical-service-identification.md` | Fictional example |
+| Tolerances separate disruption and recovery targets | MTD, RTO, RPO, workaround and minimum viable service display independently | Synthetic tolerance records | Pydantic validation; no combined score | Demo checkpoint 3 | `assessment_models.py`; `docs/impact-tolerance-guide.md` | Targets do not prove recoverability |
+| Declared dependencies can expose common mode | Deterministic map and concentration table | Ecosystem YAML and assessment relationships | Only explicit relationships; multi-service dependency rule | Checkpoints 4 and 6 | `ecosystem.py`; `assessment.py` | No undeclared propagation |
+| Tier 0 candidates are explainable | Triggered rules and missing evidence are shown | Infrastructure and control-plane records | `generate_tier0_candidates` | Checkpoint 5 | `assessment.py`; `docs/tier0-methodology.md` | Human approval required |
+| Weak signals do not establish attribution | Scenario warning labels ambiguous pre-positioning | `scenario_states.yaml`, `warning_indicators.yaml` | Phase-specific display | Checkpoint 7 | `demo.py`; `docs/warning-indicators.md` | No automatic attribution |
+| Containment creates a recovery decision | Session-only decision is carried into recovery view | Synthetic phase 5 and 6 states | Explicit state mapping; no write to source | Checkpoints 8 and 9 | `demo.py`; `docs/failure-propagation-methodology.md` | No real incident outcome |
+| Findings require evidence | Findings and gaps are reported separately | Assessment evidence references | `generate_analysis` | Checkpoints 6 and 10 | `assessment.py`; `docs/evidence-guide.md` | Missing evidence is not a finding |
+| Board reporting preserves uncertainty | Packet includes decisions, actions, gaps, and residual uncertainty | Canonical assessment | `board_packet_markdown` | Checkpoint 10 and example PDF | `assessment.py`; `docs/board-assessment-guide.md` | Not a regulatory conclusion |
