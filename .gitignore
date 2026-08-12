@@ -9,3 +9,4 @@ exercise-output/
 tmp/
 *.inspect.ndjson
 data/private_assessments/
+video/recordings/

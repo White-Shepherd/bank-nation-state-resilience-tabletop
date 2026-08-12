@@ -1,0 +1,41 @@
+{
+  "brand": {
+    "name": "Continuum Resilience",
+    "descriptor": "Cyber Operational Resilience Decision Intelligence",
+    "demonstration_client": "Harbor Ridge Bank",
+    "trademark_status": "No trademark availability claim is made."
+  },
+  "naming_candidates": [
+    {"name": "Continuum Resilience", "clarity": "High", "credibility": "High", "note": "Connects operational continuity, recovery and sustained service."},
+    {"name": "ControlPoint Intelligence", "clarity": "High", "credibility": "Medium-high", "note": "Signals control-plane and decision focus but can sound product-specific."},
+    {"name": "Assurance Vector", "clarity": "Medium", "credibility": "High", "note": "Signals direction and evidence but requires more explanation."}
+  ],
+  "colors": {
+    "continuum_navy": {"hex": "#102A43", "rgb": [16, 42, 67], "powerpoint": "16,42,67"},
+    "slate_blue": {"hex": "#315B7D", "rgb": [49, 91, 125], "powerpoint": "49,91,125"},
+    "signal_teal": {"hex": "#118C82", "rgb": [17, 140, 130], "powerpoint": "17,140,130"},
+    "copper": {"hex": "#B77832", "rgb": [183, 120, 50], "powerpoint": "183,120,50"},
+    "paper": {"hex": "#F6F8F9", "rgb": [246, 248, 249], "powerpoint": "246,248,249"},
+    "white": {"hex": "#FFFFFF", "rgb": [255, 255, 255], "powerpoint": "255,255,255"},
+    "evidence": {"hex": "#557386", "rgb": [85, 115, 134], "powerpoint": "85,115,134"},
+    "uncertainty": {"hex": "#7A7282", "rgb": [122, 114, 130], "powerpoint": "122,114,130"},
+    "red": {"hex": "#A63D40", "rgb": [166, 61, 64], "powerpoint": "166,61,64"},
+    "amber": {"hex": "#C98324", "rgb": [201, 131, 36], "powerpoint": "201,131,36"},
+    "green": {"hex": "#337A5B", "rgb": [51, 122, 91], "powerpoint": "51,122,91"}
+  },
+  "typography": {
+    "font_family": "Aptos",
+    "fallback": "Arial",
+    "deck_title": 54,
+    "section_title": 44,
+    "slide_title": 36,
+    "callout": 24,
+    "body": 18,
+    "label": 13,
+    "footnote": 11
+  },
+  "spacing": {"base": 8, "xs": 8, "sm": 16, "md": 24, "lg": 32, "xl": 48, "xxl": 72},
+  "grid": {"canvas": [1280, 720], "margin": 72, "columns": 12, "gutter": 24},
+  "line": {"hairline": 1, "standard": 2, "emphasis": 4},
+  "accessibility": {"minimum_body_size": 16, "minimum_contrast_ratio": 4.5, "status_requires_text_or_pattern": true}
+}

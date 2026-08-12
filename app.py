@@ -10,6 +10,7 @@ import streamlit as st
 from harbor_resilience import SYNTHETIC_LABEL
 from harbor_resilience.assessment_ui import render_assessment_wizard
 from harbor_resilience.data import load_services, load_tier0
+from harbor_resilience.demo import render_demo_mode, reset_demo_state
 from harbor_resilience.ecosystem import load_ecosystem, validate_graph
 from harbor_resilience.ecosystem_ui import render_ecosystem
 from harbor_resilience.engine import assess_tier_zero, impact_status
@@ -18,7 +19,7 @@ from harbor_resilience.models import Decision
 from harbor_resilience.presentation_ui import render_executive_presentation
 from harbor_resilience.reporting import after_action_markdown, board_markdown, write_pdf
 
-st.set_page_config(page_title="Harbor Ridge Resilience", page_icon="⚓", layout="wide")
+st.set_page_config(page_title="Continuum Resilience", page_icon="🛡️", layout="wide")
 st.markdown(
     "<style>.synthetic{background:#7b1f1f;color:white;padding:.55rem;text-align:center;font-weight:700}.stMetric{border:1px solid #d4d8dd;padding:.7rem;border-radius:.4rem}</style>",
     unsafe_allow_html=True,
@@ -46,24 +47,42 @@ for key, value in defaults.items():
     st.session_state.setdefault(key, value)
 
 with st.sidebar:
-    st.header("Exercise control")
-    if st.button("Start new exercise", type="primary"):
-        st.session_state.update(
-            started=True,
-            phase=0,
-            decisions=[],
-            questions=[],
-            start=datetime.now(timezone.utc).isoformat(),
-        )
-    st.session_state.participants = st.multiselect(
-        "Participants", ROLES, default=st.session_state.participants
+    st.header("Presenter")
+    demo_mode = st.toggle(
+        "Demo Mode",
+        value=st.session_state.get("demo_mode", False),
+        help="Read-only canonical synthetic demonstration with ten recording checkpoints.",
     )
-    st.progress((st.session_state.phase + 1) / 6, text=f"Phase {st.session_state.phase} of 5")
-    if st.button(
-        "Advance phase", disabled=not st.session_state.started or st.session_state.phase == 5
-    ):
-        st.session_state.phase += 1
-        st.rerun()
+    st.session_state.demo_mode = demo_mode
+    if demo_mode:
+        st.info("Synthetic-only • read-only • paths hidden")
+        if st.button("Reset demonstration"):
+            reset_demo_state()
+            st.rerun()
+    else:
+        st.caption("Standard application mode")
+        st.header("Exercise control")
+        if st.button("Start new exercise", type="primary"):
+            st.session_state.update(
+                started=True,
+                phase=0,
+                decisions=[],
+                questions=[],
+                start=datetime.now(timezone.utc).isoformat(),
+            )
+        st.session_state.participants = st.multiselect(
+            "Participants", ROLES, default=st.session_state.participants
+        )
+        st.progress((st.session_state.phase + 1) / 6, text=f"Phase {st.session_state.phase} of 5")
+        if st.button(
+            "Advance phase", disabled=not st.session_state.started or st.session_state.phase == 5
+        ):
+            st.session_state.phase += 1
+            st.rerun()
+
+if demo_mode:
+    render_demo_mode(eco_nodes, eco_relationships, eco_indicators, eco_states)
+    st.stop()
 
 tabs = st.tabs(
     [

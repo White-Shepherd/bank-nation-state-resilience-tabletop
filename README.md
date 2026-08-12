@@ -22,6 +22,28 @@ The redesigned executive map groups services by board-relevant outcome and highl
 
 The **Executive presentation** Streamlit section uses a reusable 12-slide narrative model with message-driven titles, restrained semantic color, text alternatives, and evidence identifiers. The same model generates an editable 16:9 PowerPoint and a landscape board PDF; it does not convert application screenshots into slides. See the [executive presentation guide](docs/executive-presentation-guide.md) for the design system, narrative, generation commands, and review checklist.
 
+## Continuum Resilience brand system
+
+**Continuum Resilience** is the neutral platform brand for *Cyber Operational Resilience Decision Intelligence*. Harbor Ridge Bank remains the fictional demonstration client; no trademark availability claim is made. The reusable system includes exact [brand tokens](brand/brand-tokens.json), [visual standards](brand/visual-standards.md), [chart standards](brand/chart-standards.md), [diagram standards](brand/diagram-standards.md), a 21-layout editable [PowerPoint template](presentations/templates/resilience-platform-template.pptx), and board, technical and tabletop demonstration decks.
+
+![Branded executive decision summary](docs/images/brand-executive-summary.png)
+
+![Editable concentration chart and interpretation](docs/images/brand-concentration-chart.png)
+
+Generate the complete suite with `python scripts/generate_presentation_assets.py`, `node scripts/generate_executive_presentation.mjs`, then `python scripts/package_presentation_outputs.py`. The PowerPoint files remain editable; PDF exports are assembled from the verified slide renders.
+
+## Product demonstration and video production
+
+The application includes a read-only **Demo Mode** for recording the working platform with canonical synthetic data. It hides private-assessment and persistence controls, prevents edits to the demonstration source, and provides ten deterministic presenter checkpoints from Overview through Board packet. Enable it from the sidebar, select **Reset demonstration**, and advance with the compact presenter control.
+
+The reusable [video-production package](video/README.md) contains the 40–50 minute [master runbook](video/master-demonstration-runbook.md), recording and privacy checklists, seven timed scripts, seven storyboards, a master shot list, caption guidance, branded SVG overlays and thumbnails, and an [evidence index](video/evidence-index.md) linking claims to inputs, rules, outputs, code, and qualifications. Before recording, run:
+
+```bash
+python scripts/video_preflight.py
+```
+
+The preflight checks the running application, synthetic assessment, required reports, recording directory, documentation privacy markers, and current repository state. Raw recordings belong in Git-ignored `video/recordings/`.
+
 ## Business problem and audience
 
 A regional bank can appear available while its data is untrustworthy, or fail over quickly into the same compromised administrative plane. Board risk committees, executives, cyber and technology leaders, business continuity, payments, treasury, fraud, legal, compliance, communications, third-party risk, and incident commanders use this exercise to test those dilemmas without attack instructions.
