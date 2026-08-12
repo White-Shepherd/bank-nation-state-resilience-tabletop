@@ -69,7 +69,7 @@ def is_repository_path(value: str) -> bool:
         return False
     prefixes = (
         ".github/", "brand/", "data/", "docs/", "output/", "presentations/",
-        "scripts/", "src/", "tests/", "tmp/", "video/", "README.md", ".gitignore",
+        "scripts/", "src/", "tests/", "video/", "README.md", ".gitignore",
     )
     return value.startswith(prefixes) and " " not in value
 
