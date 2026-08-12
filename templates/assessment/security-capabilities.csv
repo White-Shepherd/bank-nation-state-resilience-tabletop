@@ -1,0 +1,2 @@
+id,name,dependency_ids,owner,data_source,monitoring_tool,monitoring_team,maturity,available_during_recovery,limitation,evidence
+sec-example,Identity threat detection,infra-example,Security Operations,Identity logs,Generic monitoring,Security Operations,5,false,Recovery visibility unvalidated,SYN-EV-006

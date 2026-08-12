@@ -1,0 +1,2 @@
+id,name,type,owner,operator,hosting_model,service_ids,process_ids,recovery_method,last_recovery_test,evidence
+app-example,Wire-transfer platform,Application,CIO,Application Operations,Hybrid,svc-example,proc-example,Clean restore and validation,Unknown,SYN-EV-003

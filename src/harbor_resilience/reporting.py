@@ -71,6 +71,8 @@ Review which tolerances were challenged, which common modes constrained decision
 def write_pdf(markdown: str, path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     styles = getSampleStyleSheet()
+    styles["BodyText"].fontSize = 8.5
+    styles["BodyText"].leading = 9.5
     styles.add(ParagraphStyle(name="Label", parent=styles["Normal"], textColor=colors.HexColor("#A61B1B"), alignment=TA_CENTER, fontSize=9))
     story = []
     for line in markdown.splitlines():
@@ -89,4 +91,3 @@ def write_pdf(markdown: str, path: Path) -> None:
         canvas.drawString(0.65 * inch, 0.4 * inch, SYNTHETIC_LABEL)
         canvas.drawRightString(7.85 * inch, 0.4 * inch, f"Page {doc.page}"); canvas.restoreState()
     SimpleDocTemplate(str(path), pagesize=letter, rightMargin=0.65*inch, leftMargin=0.65*inch, topMargin=0.65*inch, bottomMargin=0.65*inch, title="Harbor Ridge Bank Board Risk Packet").build(story, onFirstPage=footer, onLaterPages=footer)
-

@@ -1,0 +1,2 @@
+service_id,mtd_minutes,rto_minutes,rpo_minutes,minimum_viable_service,data_uncertainty_minutes,manual_workaround_minutes,accountable_owner,approved,tested
+svc-example,240,120,15,25% priority throughput,30,240,Payments Operations,false,false

@@ -1,0 +1,16 @@
+SYNTHETIC EXERCISE DATA - NOT A REAL BANK
+Activity,Responsible,Accountable,Consulted,Informed,Deadline minutes,Escalation,Alternate
+Declare incident,IP-07,IP-04,IP-03; IP-05; IP-06; IP-20,IP-02; IP-01,15,IP-02,IP-03
+Activate crisis management,IP-17,IP-02,IP-03; IP-06; IP-07,IP-01,15,IP-01,IP-03
+Isolate identity systems,IP-09,IP-05,IP-04; IP-06; IP-07,IP-02,10,IP-02,IP-04
+Suspend payment channel,IP-14,IP-06,IP-03; IP-07; IP-15; IP-20,IP-02; IP-01,10,IP-02,IP-03
+Invoke manual processing,IP-14,IP-06,IP-15; IP-16; IP-17,IP-02,20,IP-02,IP-03
+Disconnect third party,IP-19,IP-06,IP-04; IP-05; IP-20,IP-02,20,IP-02,IP-03
+Initiate failover,IP-18,IP-05,IP-06; IP-07; IP-13,IP-02,30,IP-02,IP-04
+Approve recovery point,IP-18,IP-06,IP-03; IP-05; IP-13; IP-14,IP-02; IP-01,30,IP-02,IP-03
+Validate ledger integrity,IP-14; IP-15,IP-03,IP-06; IP-13; IP-16,IP-02; IP-01,30,IP-02,IP-06
+Notify regulators,IP-21,IP-20,IP-02; IP-03; IP-04,IP-01,60,IP-02,IP-03
+Contact government partners,IP-04; IP-20,IP-07,IP-02; IP-03,IP-01,30,IP-02,IP-03
+Issue customer communication,IP-22,IP-02,IP-06; IP-20; IP-21; IP-23,IP-01,30,IP-01,IP-03
+Accept residual risk,IP-03,IP-02,IP-04; IP-05; IP-06; IP-20,IP-01,45,IP-01,IP-06
+Restore service,IP-18; IP-13,IP-06,IP-03; IP-04; IP-05; IP-07,IP-02; IP-01,30,IP-02,IP-03

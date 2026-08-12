@@ -1,0 +1,17 @@
+synthetic_label: SYNTHETIC EXERCISE DATA - NOT A REAL BANK
+activities:
+  - {activity: Declare incident, responsible: [IP-07], accountable: [IP-04], consulted: [IP-03, IP-05, IP-06, IP-20], informed: [IP-02, IP-01], deadline_minutes: 15, escalation_authority: IP-02, alternate: IP-03}
+  - {activity: Activate crisis management, responsible: [IP-17], accountable: [IP-02], consulted: [IP-03, IP-06, IP-07], informed: [IP-01], deadline_minutes: 15, escalation_authority: IP-01, alternate: IP-03}
+  - {activity: Isolate identity systems, responsible: [IP-09], accountable: [IP-05], consulted: [IP-04, IP-06, IP-07], informed: [IP-02], deadline_minutes: 10, escalation_authority: IP-02, alternate: IP-04, technical_action: true, business_approval: IP-06}
+  - {activity: Suspend payment channel, responsible: [IP-14], accountable: [IP-06], consulted: [IP-03, IP-07, IP-15, IP-20], informed: [IP-02, IP-01], deadline_minutes: 10, escalation_authority: IP-02, alternate: IP-03, technical_action: true, business_approval: IP-06}
+  - {activity: Invoke manual processing, responsible: [IP-14], accountable: [IP-06], consulted: [IP-15, IP-16, IP-17], informed: [IP-02], deadline_minutes: 20, escalation_authority: IP-02, alternate: IP-03}
+  - {activity: Disconnect third party, responsible: [IP-19], accountable: [IP-06], consulted: [IP-04, IP-05, IP-20], informed: [IP-02], deadline_minutes: 20, escalation_authority: IP-02, alternate: IP-03, technical_action: true, business_approval: IP-06}
+  - {activity: Initiate failover, responsible: [IP-18], accountable: [IP-05], consulted: [IP-06, IP-07, IP-13], informed: [IP-02], deadline_minutes: 30, escalation_authority: IP-02, alternate: IP-04, technical_action: true, business_approval: IP-06}
+  - {activity: Approve recovery point, responsible: [IP-18], accountable: [IP-06], consulted: [IP-03, IP-05, IP-13, IP-14], informed: [IP-02, IP-01], deadline_minutes: 30, escalation_authority: IP-02, alternate: IP-03, technical_action: true, business_approval: IP-06}
+  - {activity: Validate ledger integrity, responsible: [IP-14, IP-15], accountable: [IP-03], consulted: [IP-06, IP-13, IP-16], informed: [IP-02, IP-01], deadline_minutes: 30, escalation_authority: IP-02, alternate: IP-06}
+  - {activity: Notify regulators, responsible: [IP-21], accountable: [IP-20], consulted: [IP-02, IP-03, IP-04], informed: [IP-01], deadline_minutes: 60, escalation_authority: IP-02, alternate: IP-03}
+  - {activity: Contact government partners, responsible: [IP-04, IP-20], accountable: [IP-07], consulted: [IP-02, IP-03], informed: [IP-01], deadline_minutes: 30, escalation_authority: IP-02, alternate: IP-03}
+  - {activity: Issue customer communication, responsible: [IP-22], accountable: [IP-02], consulted: [IP-06, IP-20, IP-21, IP-23], informed: [IP-01], deadline_minutes: 30, escalation_authority: IP-01, alternate: IP-03}
+  - {activity: Accept residual risk, responsible: [IP-03], accountable: [IP-02], consulted: [IP-04, IP-05, IP-06, IP-20], informed: [IP-01], deadline_minutes: 45, escalation_authority: IP-01, alternate: IP-06}
+  - {activity: Restore service, responsible: [IP-18, IP-13], accountable: [IP-06], consulted: [IP-03, IP-04, IP-05, IP-07], informed: [IP-02, IP-01], deadline_minutes: 30, escalation_authority: IP-02, alternate: IP-03, technical_action: true, business_approval: IP-06}
+

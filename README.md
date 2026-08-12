@@ -1,8 +1,22 @@
 # Harbor Ridge Bank Nation-State Resilience Tabletop
 
+## Critical-Service Assessment Wizard
+
+Phase 3 adds a verified self-service, local, 16-step Streamlit wizard. Users can create blank assessments; create, inspect, edit, duplicate, archive, and confirmation-delete assessment records; select relationships and evidence references; save versioned drafts atomically; resume after restart; and validate, preview, confirm, and export template-specific CSV imports. It converts validated responses into a critical-service register, time-horizon impact analysis, dependency and responsibility maps, Tier 0 candidate recommendations, evidence-based findings, scenario recommendations, corrective actions, and Markdown/PDF board packets. It never produces a universal risk score or finalizes Tier 0 status automatically.
+
+The tracked Harbor Ridge assessment is entirely fictional and synthetic. Real local drafts are stored only in Git-ignored `data/private_assessments/`; never enter secrets, credentials, regulated customer data, or sensitive production architecture.
+
+Run `streamlit run app.py`, then open **Critical-Service Assessment Wizard**. See [the wizard guide](docs/assessment-wizard-guide.md), [bulk import guide](docs/bulk-import-guide.md), and [demo script](docs/wizard-demo-script.md). CSV templates with field guidance are in `templates/assessment/`.
+
+![Synthetic Critical-Service Assessment Wizard](docs/images/assessment-wizard.png)
+
 > **SYNTHETIC EXERCISE DATA - NOT A REAL BANK.** Harbor Ridge Bank, all systems, vendors, people, values, evidence, domains, and events are fictional. This defensive project makes no claim about a real institution.
 
 An interactive four-hour executive tabletop and board risk framework translating cyber control-plane dependencies into customer, payment, liquidity, integrity, and recovery decisions.
+
+![Executive-level synthetic banking ecosystem](docs/images/high-level-banking-ecosystem.svg)
+
+The executive map starts with critical services, approved Tier 0 concentrations, principal owners, and major outside dependencies. Open the application for searchable progressive disclosure and synchronized detail panels.
 
 ## Business problem and audience
 
@@ -30,6 +44,16 @@ The application selects participants, reveals evidence, logs decisions, assumpti
 ## Board value
 
 The board view connects services affected, tolerances consumed, Tier 0 exposure, payment and liquidity effects, integrity and recovery confidence, third parties, deadlines, residual risk, management actions, and board decisions. Red/amber/green is used only with published thresholds. Technical alert volume is excluded unless it supports a risk decision.
+
+## Interactive resilience ecosystem map
+
+The **Resilience Ecosystem Map** adds deterministic Board, Risk, Technical, Incident-command, and Recovery views; a critical-service explorer; RACI responsibility map; scenario animation; warning matrix; tool-coverage maturity; concentration and recovery-paradox views; investment comparisons; and accessible table fallbacks. See the [map guide](docs/ecosystem-map-guide.md), [legend](docs/visual-legend.md), and [interactive demonstration](docs/interactive-demo-script.md).
+
+![Technical wire-transfer dependency map](docs/images/wire-transfer-service-map.svg)
+
+Legend: square = service/process/application/data, hexagon = infrastructure, diamond = security capability, filled circle = internal player, outlined circle = external player; large thick-bordered nodes are Tier 0. Status always includes a text marker. Dashed edges indicate dependency, dotted edges monitoring/escalation, and dash-dot edges recovery. Static images are synthetic repository-safe views; the live app supplies zoom, filters, selection, phase state, details, and export.
+
+![Exercise state showing ambiguous pre-positioning](docs/images/exercise-state.png)
 
 ## Install and run
 
@@ -67,4 +91,3 @@ Kevin Bailey is a former U.S. Marine, PMP-certified product and program leader, 
 ## Safety and license
 
 No exploit code, intrusion procedure, real indicators, secrets, or customer data are included. See [SECURITY.md](SECURITY.md). MIT licensed.
-

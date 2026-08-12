@@ -1,0 +1,2 @@
+id,name,service_id,exists,activation_authority,throughput_pct,max_duration_minutes,last_test,test_result,trained,evidence
+work-example,Wire manual continuity,svc-example,true,COO,25,240,Never,Requires review,false,SYN-EV-009

@@ -3,7 +3,8 @@ __pycache__/
 .ruff_cache/
 .venv/
 *.pyc
+*.egg-info/
 .streamlit/secrets.toml
 exercise-output/
 tmp/
-
+data/private_assessments/
