@@ -1,0 +1,7 @@
+label: SYNTHETIC EXERCISE DATA - NOT A REAL BANK
+items:
+  - {id: E-001, source: Fictional identity audit, observation: Privileged role added outside change window, confidence: low, benign: Emergency maintenance, corroborate: PAM and change records}
+  - {id: E-002, source: Fictional certificate log, observation: Unexpected administrative certificate, confidence: medium, benign: Renewal automation, corroborate: PKI approval and endpoint use}
+  - {id: E-003, source: Fictional backup console, observation: Retention changed, confidence: medium, benign: Capacity remediation, corroborate: immutable copy and administrator identity}
+  - {id: E-004, source: Fictional reconciliation system, observation: Ledger totals diverge, confidence: high for integrity issue and none for attribution, benign: Cutoff timing, corroborate: source transactions and independent totals}
+
