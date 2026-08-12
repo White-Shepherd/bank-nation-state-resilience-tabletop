@@ -15,6 +15,7 @@ from harbor_resilience.ecosystem_ui import render_ecosystem
 from harbor_resilience.engine import assess_tier_zero, impact_status
 from harbor_resilience.exercise import PHASES, ROLES
 from harbor_resilience.models import Decision
+from harbor_resilience.presentation_ui import render_executive_presentation
 from harbor_resilience.reporting import after_action_markdown, board_markdown, write_pdf
 
 st.set_page_config(page_title="Harbor Ridge Resilience", page_icon="⚓", layout="wide")
@@ -68,6 +69,7 @@ tabs = st.tabs(
     [
         "Exercise",
         "Board dashboard",
+        "Executive presentation",
         "Resilience Ecosystem Map",
         "Critical-Service Assessment Wizard",
         "Tier 0",
@@ -110,6 +112,14 @@ with tabs[1]:
         "RAG rules: Red = any explicit tolerance breached; Amber = at least 75% of MTD consumed; Green = below 75% with no breach. Customer harm, liquidity, third parties, deadlines, residual risk, management actions, and board decisions require accountable human entry."
     )
 with tabs[2]:
+    render_executive_presentation(
+        eco_nodes,
+        eco_relationships,
+        eco_responsibilities,
+        eco_indicators,
+        eco_coverage,
+    )
+with tabs[3]:
     render_ecosystem(
         eco_nodes,
         eco_relationships,
@@ -120,9 +130,9 @@ with tabs[2]:
         services,
         st.session_state.decisions,
     )
-with tabs[3]:
-    render_assessment_wizard()
 with tabs[4]:
+    render_assessment_wizard()
+with tabs[5]:
     st.write(
         "Institution-specific Tier 0 is not a universal regulatory designation and is distinct from NIST CSF Implementation Tiers."
     )
@@ -138,7 +148,7 @@ with tabs[4]:
             st.write(
                 "Human approval:", candidate.approved, "| Evidence:", ", ".join(candidate.evidence)
             )
-with tabs[5]:
+with tabs[6]:
     with st.form("decision"):
         decision = st.selectbox(
             "Decision required",
@@ -200,7 +210,7 @@ with tabs[5]:
         "synthetic-exercise-decisions.csv",
         "text/csv",
     )
-with tabs[6]:
+with tabs[7]:
     board = board_markdown(services, candidates, st.session_state.decisions)
     aar = after_action_markdown(st.session_state.participants, st.session_state.decisions)
     st.download_button("Download board packet (Markdown)", board, "board-packet.md")

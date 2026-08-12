@@ -16,7 +16,11 @@ An interactive four-hour executive tabletop and board risk framework translating
 
 ![Executive-level synthetic banking ecosystem](docs/images/high-level-banking-ecosystem.svg)
 
-The executive map starts with critical services, approved Tier 0 concentrations, principal owners, and major outside dependencies. Open the application for searchable progressive disclosure and synchronized detail panels.
+The redesigned executive map groups services by board-relevant outcome and highlights the declared shared dependencies beneath them. It communicates one message: concentrated control-plane authority can create common-mode failure. Counts are traceable relationship counts, not risk scores, probabilities, or loss estimates.
+
+## Executive presentation and board reporting
+
+The **Executive presentation** Streamlit section uses a reusable 12-slide narrative model with message-driven titles, restrained semantic color, text alternatives, and evidence identifiers. The same model generates an editable 16:9 PowerPoint and a landscape board PDF; it does not convert application screenshots into slides. See the [executive presentation guide](docs/executive-presentation-guide.md) for the design system, narrative, generation commands, and review checklist.
 
 ## Business problem and audience
 
