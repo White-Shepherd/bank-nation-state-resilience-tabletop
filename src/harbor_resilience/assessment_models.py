@@ -15,6 +15,7 @@ class Record(BaseModel):
     owner: str = "Unknown"
     evidence: list[str] = []
     confidence: ReviewState = "Unknown"
+    archived: bool = False
 
 
 class Organization(BaseModel):
@@ -37,10 +38,12 @@ class Organization(BaseModel):
 
 
 class ImpactProfile(BaseModel):
+    id: str = Field(default="impact-draft", pattern=r"^[a-z][a-z0-9-]*$")
     service_id: str
     horizon: str
     dimensions: dict[str, int]
     rationale: str = ""
+    archived: bool = False
 
     @model_validator(mode="after")
     def severe_needs_rationale(self):
@@ -50,6 +53,7 @@ class ImpactProfile(BaseModel):
 
 
 class ImpactTolerance(BaseModel):
+    id: str = Field(default="tolerance-draft", pattern=r"^[a-z][a-z0-9-]*$")
     service_id: str
     mtd_minutes: int = Field(gt=0)
     rto_minutes: int = Field(gt=0)
@@ -62,6 +66,7 @@ class ImpactTolerance(BaseModel):
     accountable_owner: str
     approved: bool = False
     tested: bool = False
+    archived: bool = False
 
 
 class CriticalService(Record):
@@ -227,6 +232,21 @@ class Relationship(BaseModel):
     relationship_type: str
     evidence: str
     confidence: ReviewState
+    archived: bool = False
+
+
+class EvidenceItem(BaseModel):
+    id: str = Field(pattern=r"^[a-z][a-z0-9-]*$")
+    name: str
+    subject_ids: list[str]
+    evidence_type: str
+    source: str
+    evidence_date: date | None = None
+    scope: str
+    owner: str
+    confidence: ReviewState = "Requires review"
+    reference: str = "Evidence unavailable"
+    archived: bool = False
 
 
 class Responsibility(BaseModel):
@@ -278,11 +298,13 @@ class EvidenceGap(BaseModel):
 
 
 class Approval(BaseModel):
+    id: str = Field(default="approval-draft", pattern=r"^[a-z][a-z0-9-]*$")
     role: str
     approver: str
     status: Literal["Pending", "Approved", "Changes requested"]
     timestamp: datetime | None = None
     note: str = "Synthetic demonstration approval; not an electronic signature"
+    archived: bool = False
 
 
 class ScenarioRecommendation(BaseModel):
@@ -332,6 +354,7 @@ class Assessment(BaseModel):
     workarounds: list[ManualWorkaround] = []
     recovery_capabilities: list[RecoveryCapability] = []
     relationships: list[Relationship] = []
+    evidence_items: list[EvidenceItem] = []
     responsibilities: list[Responsibility] = []
     tier0_candidates: list[Tier0Candidate] = []
     findings: list[Finding] = []
@@ -339,16 +362,27 @@ class Assessment(BaseModel):
     approvals: list[Approval] = []
     scenarios: list[ScenarioRecommendation] = []
     corrective_actions: list[CorrectiveAction] = []
+    incomplete_records: dict[str, list[dict]] = {}
 
     @model_validator(mode="after")
     def identifiers_are_unique(self):
         records = (
             self.services
+            + self.impacts
+            + self.tolerances
             + self.processes
             + self.applications
             + self.data_assets
             + self.infrastructure
             + self.control_planes
+            + self.security_capabilities
+            + self.internal_players
+            + self.third_parties
+            + self.workarounds
+            + self.recovery_capabilities
+            + self.evidence_items
+            + self.relationships
+            + self.approvals
         )
         ids = [record.id for record in records]
         if len(ids) != len(set(ids)):

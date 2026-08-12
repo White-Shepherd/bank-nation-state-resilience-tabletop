@@ -2,7 +2,7 @@
 
 ## Critical-Service Assessment Wizard
 
-Phase 3 adds a local, 16-step Streamlit wizard that converts structured service-owner responses into a critical-service register, time-horizon impact analysis, dependency and responsibility maps, Tier 0 candidate recommendations, evidence-based findings, scenario recommendations, corrective actions, and Markdown/PDF board packets. It never produces a universal risk score or finalizes Tier 0 status automatically.
+Phase 3 adds a verified self-service, local, 16-step Streamlit wizard. Users can create blank assessments; create, inspect, edit, duplicate, archive, and confirmation-delete assessment records; select relationships and evidence references; save versioned drafts atomically; resume after restart; and validate, preview, confirm, and export template-specific CSV imports. It converts validated responses into a critical-service register, time-horizon impact analysis, dependency and responsibility maps, Tier 0 candidate recommendations, evidence-based findings, scenario recommendations, corrective actions, and Markdown/PDF board packets. It never produces a universal risk score or finalizes Tier 0 status automatically.
 
 The tracked Harbor Ridge assessment is entirely fictional and synthetic. Real local drafts are stored only in Git-ignored `data/private_assessments/`; never enter secrets, credentials, regulated customer data, or sensitive production architecture.
 

@@ -19,6 +19,7 @@ from harbor_resilience.assessment_models import (
     CriticalService,
     DataAsset,
     EvidenceGap,
+    EvidenceItem,
     ImpactProfile,
     ImpactTolerance,
     InfrastructureDependency,
@@ -173,6 +174,7 @@ def build() -> Assessment:
     ]
     tolerances = [
         ImpactTolerance(
+            id=f"tolerance-{i + 1:02d}",
             service_id=s.id,
             mtd_minutes=240 if i < 8 else 480,
             rto_minutes=120 if i < 8 else 240,
@@ -197,6 +199,7 @@ def build() -> Assessment:
     horizons = ["15 minutes", "1 hour", "4 hours", "8 hours", "24 hours", "72 hours", "7 days"]
     impacts = [
         ImpactProfile(
+            id=f"impact-{i + 1:02d}-{j + 1:02d}",
             service_id=s.id,
             horizon=h,
             dimensions={
@@ -528,17 +531,36 @@ def build() -> Assessment:
             )
             for i, s in enumerate(services)
         ],
+        evidence_items=[
+            EvidenceItem(
+                id=f"syn-ev-{i + 1:03d}",
+                name=f"Synthetic evidence {i + 1}",
+                subject_ids=[services[i % 12].id],
+                evidence_type="Synthetic interview note",
+                source="Fictional service owner",
+                evidence_date=date(2026, 8, 12),
+                scope="Demonstration assessment",
+                owner="Assessment Owner",
+                confidence="Requires review",
+                reference=f"SYN-EV-{i + 1:03d}",
+            )
+            for i in range(12)
+        ],
         approvals=[
-            Approval(role=r, approver=f"Synthetic {r}", status="Approved")
-            for r in [
-                "Business owner",
-                "Technology owner",
-                "Risk owner",
-                "Business continuity",
-                "Cybersecurity",
-                "Compliance",
-                "Executive sponsor",
-            ]
+            Approval(
+                id=f"approval-{i + 1:02d}", role=r, approver=f"Synthetic {r}", status="Approved"
+            )
+            for i, r in enumerate(
+                [
+                    "Business owner",
+                    "Technology owner",
+                    "Risk owner",
+                    "Business continuity",
+                    "Cybersecurity",
+                    "Compliance",
+                    "Executive sponsor",
+                ]
+            )
         ],
     )
     assessment.tier0_candidates = generate_tier0_candidates(assessment)

@@ -4,11 +4,15 @@ import csv
 import hashlib
 import io
 import json
+import os
 import shutil
-from datetime import datetime, timezone
+import tempfile
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-from .assessment_models import Assessment, EvidenceGap, Finding, Tier0Candidate
+from pydantic import ValidationError
+
+from .assessment_models import Assessment, EvidenceGap, Finding, Organization, Tier0Candidate
 
 SYNTHETIC_NOTICE = "SYNTHETIC DEMONSTRATION DATA - NOT A REAL BANK ASSESSMENT"
 SCHEMA_VERSION = "1.0.0"
@@ -45,6 +49,33 @@ BRANCHING_RULES = {
 }
 
 
+def new_assessment(identifier: str, title: str, organization_name: str) -> Assessment:
+    today = datetime.now(timezone.utc).date()
+    return Assessment(
+        id=identifier,
+        version=1,
+        title=title,
+        organization=Organization(
+            name=organization_name,
+            industry="Unknown",
+            size="Unknown",
+            geographic_footprint="Unknown",
+            customer_types=[],
+            products_services=[],
+            legal_entities=[],
+            primary_regulators=[],
+            operating_model="Requires review",
+            technology_model="Requires review",
+            outsourcing_model="Requires review",
+            assessment_owner="Unknown",
+            executive_sponsor="Unknown",
+            assessment_date=today,
+            review_date=today + timedelta(days=180),
+            classification="Internal",
+        ),
+    )
+
+
 def load_assessment(path: Path) -> Assessment:
     return Assessment.model_validate_json(path.read_text(encoding="utf-8"))
 
@@ -59,8 +90,164 @@ def save_assessment(assessment: Assessment, root: Path = PRIVATE_ROOT) -> Path:
         prior = load_assessment(target)
         shutil.copy2(target, history / f"v{prior.version:04d}.json")
         assessment.version = prior.version + 1
-    target.write_text(assessment.model_dump_json(indent=2), encoding="utf-8")
+    payload = assessment.model_dump_json(indent=2)
+    handle, temporary = tempfile.mkstemp(prefix=f".{assessment.id}-", suffix=".tmp", dir=root)
+    try:
+        with os.fdopen(handle, "w", encoding="utf-8", newline="\n") as stream:
+            stream.write(payload)
+            stream.flush()
+            os.fsync(stream.fileno())
+        Assessment.model_validate_json(Path(temporary).read_text(encoding="utf-8"))
+        os.replace(temporary, target)
+    finally:
+        if os.path.exists(temporary):
+            os.unlink(temporary)
     return target
+
+
+COLLECTION_MODELS = {
+    "services": "CriticalService",
+    "impacts": "ImpactProfile",
+    "tolerances": "ImpactTolerance",
+    "processes": "BusinessProcess",
+    "applications": "Application",
+    "data_assets": "DataAsset",
+    "infrastructure": "InfrastructureDependency",
+    "control_planes": "ControlPlane",
+    "security_capabilities": "SecurityCapability",
+    "internal_players": "InternalPlayer",
+    "third_parties": "ThirdParty",
+    "workarounds": "ManualWorkaround",
+    "recovery_capabilities": "RecoveryCapability",
+    "evidence_items": "EvidenceItem",
+    "relationships": "Relationship",
+    "approvals": "Approval",
+}
+
+
+def record_id(record) -> str:
+    return getattr(record, "id", "")
+
+
+def upsert_record(assessment: Assessment, collection: str, payload: dict) -> Assessment:
+    if collection not in COLLECTION_MODELS:
+        raise ValueError("unsupported assessment collection")
+    from . import assessment_models
+
+    model = getattr(assessment_models, COLLECTION_MODELS[collection])
+    record = model.model_validate(payload)
+    if collection == "approvals" and getattr(record, "status", "") == "Approved":
+        blockers = approval_blockers(assessment)
+        if blockers:
+            raise ValueError("approval blocked: " + "; ".join(blockers))
+    records = list(getattr(assessment, collection))
+    match = next(
+        (i for i, item in enumerate(records) if record_id(item) == record_id(record)), None
+    )
+    if match is None:
+        records.append(record)
+    else:
+        records[match] = record
+    updated = assessment.model_copy(update={collection: records}, deep=True)
+    validate_references(updated)
+    return updated
+
+
+def duplicate_record(
+    assessment: Assessment, collection: str, source_id: str, new_id: str
+) -> Assessment:
+    source = next((x for x in getattr(assessment, collection) if record_id(x) == source_id), None)
+    if source is None:
+        raise ValueError(f"record not found: {source_id}")
+    payload = source.model_dump()
+    payload["id"] = new_id
+    payload["archived"] = False
+    if "name" in payload:
+        payload["name"] = f"Copy of {payload['name']}"
+    return upsert_record(assessment, collection, payload)
+
+
+def archive_record(assessment: Assessment, collection: str, identifier: str) -> Assessment:
+    records = list(getattr(assessment, collection))
+    found = False
+    for i, item in enumerate(records):
+        if record_id(item) == identifier:
+            records[i] = item.model_copy(update={"archived": True})
+            found = True
+    if not found:
+        raise ValueError(f"record not found: {identifier}")
+    return assessment.model_copy(update={collection: records}, deep=True)
+
+
+def delete_record(
+    assessment: Assessment, collection: str, identifier: str, confirmed: bool
+) -> Assessment:
+    if not confirmed:
+        raise ValueError("explicit confirmation required")
+    referenced = [
+        r.id
+        for r in assessment.relationships
+        if not r.archived and identifier in {r.source, r.destination}
+    ]
+    if referenced and collection != "relationships":
+        raise ValueError(f"record is referenced by relationships: {', '.join(referenced)}")
+    records = [x for x in getattr(assessment, collection) if record_id(x) != identifier]
+    if len(records) == len(getattr(assessment, collection)):
+        raise ValueError(f"record not found: {identifier}")
+    return assessment.model_copy(update={collection: records}, deep=True)
+
+
+def all_record_ids(assessment: Assessment) -> set[str]:
+    ids = {assessment.id}
+    for collection in COLLECTION_MODELS:
+        ids.update(record_id(x) for x in getattr(assessment, collection) if record_id(x))
+    return ids
+
+
+def validate_references(assessment: Assessment) -> None:
+    endpoints = all_record_ids(assessment)
+    errors = []
+    for relationship in assessment.relationships:
+        if relationship.source not in endpoints:
+            errors.append(f"{relationship.id}.source: unknown record {relationship.source}")
+        if relationship.destination not in endpoints:
+            errors.append(
+                f"{relationship.id}.destination: unknown record {relationship.destination}"
+            )
+    service_ids = {x.id for x in assessment.services}
+    for process in assessment.processes:
+        for value in process.service_ids:
+            if value not in service_ids:
+                errors.append(f"{process.id}.service_ids: unknown service {value}")
+    if errors:
+        raise ValueError("; ".join(errors))
+
+
+def approval_blockers(assessment: Assessment) -> list[str]:
+    blockers = tolerance_conflicts(assessment)
+    blockers.extend(
+        f"{service.id}: missing business owner"
+        for service in assessment.services
+        if service.owner in {"", "Unknown"}
+    )
+    try:
+        validate_references(assessment)
+    except ValueError as exc:
+        blockers.append(str(exc))
+    return blockers
+
+
+def field_errors(model, payload: dict) -> dict[str, str]:
+    try:
+        model.model_validate(payload)
+        return {}
+    except ValidationError as exc:
+        return {
+            ".".join(
+                str(x) for x in error["loc"]
+            ): f"{error['msg']}. Correct this field or retain the record as an incomplete draft."
+            for error in exc.errors()
+        }
 
 
 def duplicate_assessment(assessment: Assessment, new_id: str) -> Assessment:

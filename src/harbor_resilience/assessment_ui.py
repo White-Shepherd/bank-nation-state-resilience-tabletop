@@ -4,6 +4,7 @@ from pathlib import Path
 
 import plotly.graph_objects as go
 import streamlit as st
+from pydantic import ValidationError
 
 from .assessment import (
     BRANCHING_RULES,
@@ -19,12 +20,15 @@ from .assessment import (
     import_assessment,
     integrity_digest,
     load_assessment,
+    new_assessment,
     raci_conflicts,
     responsibility_csv,
     save_assessment,
     tolerance_conflicts,
 )
+from .assessment_import import TEMPLATE_SPECS, export_template_rows, import_valid_rows, validate_csv
 from .assessment_models import Assessment
+from .record_editor import render_record_editor
 from .reporting import write_pdf
 
 
@@ -78,6 +82,16 @@ def _dashboard(assessment: Assessment) -> None:
             use_container_width=True,
         )
     with views[2]:
+        if not assessment.relationships or not assessment.infrastructure:
+            st.info(
+                "Add explicit relationships and infrastructure dependencies to populate the dependency graph."
+            )
+            st.dataframe(
+                [r.model_dump() for r in assessment.relationships],
+                hide_index=True,
+                use_container_width=True,
+            )
+            return
         edge_x = []
         edge_y = []
         for i, _ in enumerate(assessment.relationships):
@@ -186,22 +200,49 @@ def _dashboard(assessment: Assessment) -> None:
 def render_assessment_wizard() -> None:
     st.header("Critical-Service Assessment Wizard")
     st.caption(
-        "Local structured assessment | autosaved drafts | human judgment required for final Tier 0 and risk decisions"
+        "Local structured assessment | explicit atomic draft saves | human judgment required for final Tier 0 and risk decisions"
     )
     synthetic = Path("data/synthetic_assessments/harbor-ridge-2026.json")
     choices = sorted(PRIVATE_ROOT.glob("*.json")) if PRIVATE_ROOT.exists() else []
+    with st.expander("Create blank assessment"), st.form("blank-assessment"):
+        blank_id = st.text_input("Assessment ID", value="new-assessment")
+        blank_title = st.text_input("Assessment title", value="Critical-Service Assessment")
+        blank_org = st.text_input("Organization name", value="Unknown organization")
+        if st.form_submit_button("Create assessment"):
+            try:
+                created = new_assessment(blank_id, blank_title, blank_org)
+                save_assessment(created)
+                st.session_state.wizard_assessment = created.model_dump(mode="json")
+                st.session_state.wizard_unsaved = False
+                st.session_state.wizard_last_save = created.updated_at.isoformat()
+                st.success("Blank local assessment created and saved.")
+                st.rerun()
+            except (OSError, ValueError, ValidationError) as exc:
+                st.error(f"Assessment could not be created: {exc}")
     source = st.selectbox("Assessment", [synthetic, *choices], format_func=lambda p: p.stem)
     assessment = load_assessment(source)
+    source_key = str(source.resolve())
+    if st.session_state.get("wizard_source") != source_key:
+        st.session_state.wizard_source = source_key
+        st.session_state.wizard_assessment = assessment.model_dump(mode="json")
+        st.session_state.wizard_unsaved = False
+        st.session_state.wizard_last_save = assessment.updated_at.isoformat()
     st.session_state.setdefault("wizard_assessment", assessment.model_dump(mode="json"))
     if st.button("Load selected assessment"):
+        st.session_state.wizard_source = source_key
         st.session_state.wizard_assessment = assessment.model_dump(mode="json")
+        st.session_state.wizard_unsaved = False
+        st.session_state.wizard_last_save = assessment.updated_at.isoformat()
         st.rerun()
     assessment = Assessment.model_validate(st.session_state.wizard_assessment)
     if assessment.status == "Approved":
         st.info("Read-only approved mode. Duplicate the assessment to create an editable version.")
     c1, c2, c3, c4 = st.columns(4)
-    if c1.button("Save draft", disabled=assessment.status == "Approved"):
+    if c1.button("Save Draft", disabled=assessment.status == "Approved"):
         path = save_assessment(assessment)
+        st.session_state.wizard_assessment = assessment.model_dump(mode="json")
+        st.session_state.wizard_unsaved = False
+        st.session_state.wizard_last_save = assessment.updated_at.isoformat()
         st.success(f"Saved version {assessment.version} locally: {path.name}")
     if c2.button("Duplicate"):
         copy = duplicate_assessment(assessment, f"{assessment.id}-copy")
@@ -214,6 +255,12 @@ def render_assessment_wizard() -> None:
         assessment = archive_assessment(assessment)
         save_assessment(assessment)
         st.session_state.wizard_assessment = assessment.model_dump(mode="json")
+    last_save = st.session_state.get("wizard_last_save")
+    st.caption(f"Last successful save: {last_save or 'Not saved in this session'}")
+    if st.session_state.get("wizard_unsaved", False):
+        st.warning(
+            "This form has unsaved changes. Wizard navigation is disabled until you submit or discard them."
+        )
     uploaded = st.file_uploader("Import assessment JSON", type="json")
     if uploaded and st.button("Validate and import"):
         imported = import_assessment(uploaded.getvalue())
@@ -228,6 +275,8 @@ def render_assessment_wizard() -> None:
         range(1, 17),
         index=assessment.current_step - 1,
         format_func=lambda n: f"{n}. {STEPS[n - 1]}",
+        disabled=st.session_state.get("wizard_unsaved", False),
+        key=f"wizard-step-{assessment.id}-{assessment.current_step}",
     )
     assessment.current_step = step
     with st.expander("Context, definitions, and branching", expanded=True):
@@ -264,19 +313,73 @@ def render_assessment_wizard() -> None:
             hide_index=True,
             use_container_width=True,
         )
+    if step in range(2, 13) or step == 16:
+        assessment = render_record_editor(assessment, step)
+        st.session_state.wizard_assessment = assessment.model_dump(mode="json")
     nav1, nav2, _ = st.columns([1, 1, 6])
-    if nav1.button("Previous", disabled=step == 1):
+    navigation_disabled = st.session_state.get("wizard_unsaved", False)
+    if nav1.button("Previous", disabled=step == 1 or navigation_disabled):
         assessment.current_step = step - 1
+        save_assessment(assessment)
+        st.session_state.wizard_last_save = assessment.updated_at.isoformat()
         st.session_state.wizard_assessment = assessment.model_dump(mode="json")
         st.rerun()
-    if nav2.button("Next", disabled=step == 16):
+    if nav2.button("Next", disabled=step == 16 or navigation_disabled):
         assessment.current_step = step + 1
+        save_assessment(assessment)
+        st.session_state.wizard_last_save = assessment.updated_at.isoformat()
         st.session_state.wizard_assessment = assessment.model_dump(mode="json")
         st.rerun()
     assessment.tier0_candidates = generate_tier0_candidates(assessment)
     assessment.findings, assessment.evidence_gaps = generate_analysis(assessment)
     st.session_state.wizard_assessment = assessment.model_dump(mode="json")
     st.divider()
+    st.subheader("Template-specific CSV import")
+    template = st.selectbox("Assessment template", list(TEMPLATE_SPECS), key="csv-template")
+    template_path = Path("templates/assessment") / f"{template}.csv"
+    st.download_button(
+        "Download selected template", template_path.read_bytes(), template_path.name, "text/csv"
+    )
+    csv_file = st.file_uploader(
+        f"Upload {template_path.name}", type="csv", key=f"upload-{template}"
+    )
+    if csv_file:
+        csv_text = csv_file.getvalue().decode("utf-8-sig")
+        valid_rows, invalid_rows = validate_csv(template, csv_text, assessment)
+        st.metric("Valid rows", len(valid_rows))
+        st.metric("Invalid rows", len({x["row"] for x in invalid_rows}))
+        st.caption("Import preview")
+        st.dataframe(valid_rows, hide_index=True, use_container_width=True)
+        if invalid_rows:
+            st.error(
+                "Invalid rows will not be imported. Correct each field-level message and upload again."
+            )
+            st.dataframe(invalid_rows, hide_index=True, use_container_width=True)
+        confirm_import = st.checkbox(
+            "Confirm import of valid preview rows", key=f"confirm-import-{template}"
+        )
+        if st.button(
+            "Import valid rows",
+            disabled=not confirm_import or not valid_rows,
+            key=f"import-{template}",
+        ):
+            before = assessment.model_dump_json()
+            try:
+                assessment = import_valid_rows(assessment, template, valid_rows, True)
+                save_assessment(assessment)
+                st.session_state.wizard_assessment = assessment.model_dump(mode="json")
+                st.session_state.wizard_last_save = assessment.updated_at.isoformat()
+                st.success(
+                    f"Imported {len(valid_rows)} valid rows; {len({x['row'] for x in invalid_rows})} invalid rows rejected. Version history preserved."
+                )
+            except (OSError, ValueError, ValidationError) as exc:
+                assessment = Assessment.model_validate_json(before)
+                st.error(f"Import rolled back: {exc}")
+    staged_export = export_template_rows(assessment, template)
+    if staged_export:
+        st.download_button(
+            "Export imported rows in the same schema", staged_export, template_path.name, "text/csv"
+        )
     _dashboard(assessment)
     st.subheader("Export and comparison")
     if assessment.organization.classification in {"Confidential", "Restricted"}:
