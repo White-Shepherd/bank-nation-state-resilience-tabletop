@@ -1,0 +1,2 @@
+id,name,type,owner,authority,classification,service_ids,integrity,recovery_method,evidence
+data-example,Payment instruction store,Data asset,Data Operations,Authoritative,Restricted,svc-example,Reconciliation required,Validated snapshot,SYN-EV-004

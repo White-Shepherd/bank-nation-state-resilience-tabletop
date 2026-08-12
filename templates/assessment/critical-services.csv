@@ -1,0 +1,2 @@
+id,name,description,stakeholders,business_owner,technical_owner,criticality,rationale,evidence
+svc-example,Wire transfers,Customer funds-transfer outcome,Customers;Treasury,Payments Operations,CIO,Requires review,Synthetic example only,SYN-EV-001

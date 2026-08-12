@@ -1,5 +1,15 @@
 # Harbor Ridge Bank Nation-State Resilience Tabletop
 
+## Critical-Service Assessment Wizard
+
+Phase 3 adds a local, 16-step Streamlit wizard that converts structured service-owner responses into a critical-service register, time-horizon impact analysis, dependency and responsibility maps, Tier 0 candidate recommendations, evidence-based findings, scenario recommendations, corrective actions, and Markdown/PDF board packets. It never produces a universal risk score or finalizes Tier 0 status automatically.
+
+The tracked Harbor Ridge assessment is entirely fictional and synthetic. Real local drafts are stored only in Git-ignored `data/private_assessments/`; never enter secrets, credentials, regulated customer data, or sensitive production architecture.
+
+Run `streamlit run app.py`, then open **Critical-Service Assessment Wizard**. See [the wizard guide](docs/assessment-wizard-guide.md), [bulk import guide](docs/bulk-import-guide.md), and [demo script](docs/wizard-demo-script.md). CSV templates with field guidance are in `templates/assessment/`.
+
+![Synthetic Critical-Service Assessment Wizard](docs/images/assessment-wizard.png)
+
 > **SYNTHETIC EXERCISE DATA - NOT A REAL BANK.** Harbor Ridge Bank, all systems, vendors, people, values, evidence, domains, and events are fictional. This defensive project makes no claim about a real institution.
 
 An interactive four-hour executive tabletop and board risk framework translating cyber control-plane dependencies into customer, payment, liquidity, integrity, and recovery decisions.

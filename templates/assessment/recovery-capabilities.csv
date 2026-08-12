@@ -1,0 +1,2 @@
+id,name,service_ids,owner,status,last_exercise,proven_duration_minutes,evidence
+rec-example,Wire recovery,svc-example,Disaster Recovery,restore-tested,2026 synthetic exercise,180,SYN-EV-010

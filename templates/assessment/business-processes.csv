@@ -1,0 +1,2 @@
+id,name,service_ids,owner,trigger,inputs,outputs,operating_window,manual_alternative,evidence
+proc-example,Payment approval,svc-example,Payments Operations,Approved request,Payment instruction,Approved instruction,24x7,Dual-control manual queue,SYN-EV-002
