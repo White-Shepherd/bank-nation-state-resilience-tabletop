@@ -1,0 +1,2 @@
+id,subject_id,evidence_type,source,date,scope,owner,confidence,notes
+SYN-EV-001,svc-example,Synthetic interview note,Fictional service owner,2026-08-12,Service definition,Assessment Owner,Requires review,Synthetic example only

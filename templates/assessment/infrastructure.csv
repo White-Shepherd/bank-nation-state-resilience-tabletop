@@ -1,0 +1,2 @@
+id,name,type,owner,service_ids,administrative_authority,recovery_dependency,alternate,separated_from_production,monitoring_coverage,evidence
+infra-example,Enterprise identity,Identity,Identity Team,svc-example,Enterprise,true,None,false,Deployed untested,SYN-EV-005
