@@ -1,8 +1,16 @@
+import importlib.util
 from pathlib import Path
 
-from scripts.validate_agent_learning import ALLOWED_STATUSES, metadata, validate
-
 ROOT = Path(__file__).resolve().parents[1]
+SPEC = importlib.util.spec_from_file_location(
+    "validate_agent_learning", ROOT / "scripts" / "validate_agent_learning.py"
+)
+assert SPEC and SPEC.loader
+VALIDATOR = importlib.util.module_from_spec(SPEC)
+SPEC.loader.exec_module(VALIDATOR)
+ALLOWED_STATUSES = VALIDATOR.ALLOWED_STATUSES
+metadata = VALIDATOR.metadata
+validate = VALIDATOR.validate
 
 
 def test_agent_learning_framework_is_valid():
