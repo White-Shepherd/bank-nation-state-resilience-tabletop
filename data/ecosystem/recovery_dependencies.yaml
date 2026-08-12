@@ -1,0 +1,9 @@
+synthetic_label: SYNTHETIC EXERCISE DATA - NOT A REAL BANK
+paradoxes:
+  - {id: RP-01, dependency: IF-17, depends_on: IF-01, risk: Backup administration depends on potentially compromised production identity, mitigation: Independent recovery identity and offline copies, validation: Clean credential restoration test}
+  - {id: RP-02, dependency: IF-18, depends_on: IF-04, risk: Recovery orchestration depends on production DNS, mitigation: Independent recovery DNS, validation: Isolated recovery exercise}
+  - {id: RP-03, dependency: IF-19, depends_on: IF-01, risk: Clean-room access could reuse production credentials, mitigation: Separate identities and privileged workstations, validation: Credential independence test}
+  - {id: RP-04, dependency: SC-01, depends_on: IF-07, risk: Monitoring may disappear during network failover, mitigation: Out-of-band telemetry path, validation: Failover visibility test}
+  - {id: RP-05, dependency: AD-15, depends_on: IF-17, risk: Replication or backup may reproduce corruption, mitigation: Point-in-time integrity validation and reconciliation, validation: Known-corruption recovery test}
+  - {id: RP-06, dependency: BP-13, depends_on: IP-05, risk: Recovery authorization could require an unavailable executive, mitigation: Named alternate IP-04, validation: RACI availability drill}
+

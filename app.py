@@ -1,3 +1,5 @@
+import csv
+import io
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -7,6 +9,8 @@ import streamlit as st
 
 from harbor_resilience import SYNTHETIC_LABEL
 from harbor_resilience.data import load_services, load_tier0
+from harbor_resilience.ecosystem import load_ecosystem, validate_graph
+from harbor_resilience.ecosystem_ui import render_ecosystem
 from harbor_resilience.engine import assess_tier_zero, impact_status
 from harbor_resilience.exercise import PHASES, ROLES
 from harbor_resilience.models import Decision
@@ -19,6 +23,8 @@ st.title("Harbor Ridge Bank | Nation-State Resilience Tabletop")
 st.caption("Fictional U.S. regional bank | $35B assets | 1.4M customers | 140 branches | defensive exercise")
 
 services, candidates = load_services(), load_tier0()
+eco_nodes, eco_relationships, eco_responsibilities, eco_indicators, eco_coverage, eco_states = load_ecosystem()
+validate_graph(eco_nodes, eco_relationships)
 defaults = {"started": False, "phase": 0, "decisions": [], "questions": [], "participants": [], "start": None}
 for key, value in defaults.items(): st.session_state.setdefault(key, value)
 
@@ -30,7 +36,7 @@ with st.sidebar:
     st.progress((st.session_state.phase + 1) / 6, text=f"Phase {st.session_state.phase} of 5")
     if st.button("Advance phase", disabled=not st.session_state.started or st.session_state.phase == 5): st.session_state.phase += 1; st.rerun()
 
-tabs = st.tabs(["Exercise", "Board dashboard", "Tier 0", "Decisions", "Reports"])
+tabs = st.tabs(["Exercise", "Board dashboard", "Resilience Ecosystem Map", "Tier 0", "Decisions", "Reports"])
 with tabs[0]:
     phase, title, injects = PHASES[st.session_state.phase]
     st.subheader(f"Phase {phase}: {title}")
@@ -53,13 +59,15 @@ with tabs[1]:
     c3.metric("Data integrity", "Uncertain" if phase >= 3 else "No confirmed loss"); c4.metric("Recovery confidence", "Low" if phase >= 4 else "Unvalidated")
     st.warning("RAG rules: Red = any explicit tolerance breached; Amber = at least 75% of MTD consumed; Green = below 75% with no breach. Customer harm, liquidity, third parties, deadlines, residual risk, management actions, and board decisions require accountable human entry.")
 with tabs[2]:
+    render_ecosystem(eco_nodes, eco_relationships, eco_responsibilities, eco_indicators, eco_coverage, eco_states, services, st.session_state.decisions)
+with tabs[3]:
     st.write("Institution-specific Tier 0 is not a universal regulatory designation and is distinct from NIST CSF Implementation Tiers.")
     for candidate in candidates:
         qualified, reasons = assess_tier_zero(candidate)
         with st.expander(f"{candidate.name} — {'Approved Tier 0' if candidate.approved else 'Candidate / not approved'}"):
             st.write("Decision-rule result:", "; ".join(reasons) if qualified else "No automatic criterion met")
             st.write("Human approval:", candidate.approved, "| Evidence:", ", ".join(candidate.evidence))
-with tabs[3]:
+with tabs[4]:
     with st.form("decision"):
         decision = st.selectbox("Decision required", ["Raise threat posture", "Declare a material cyber incident", "Invoke crisis management", "Freeze privileged changes", "Isolate identity infrastructure", "Suspend selected payment channels", "Activate manual processing", "Fail over to recovery systems", "Disconnect a third party", "Notify regulators (counsel/compliance determine jurisdiction-specific timing)", "Contact CISA, FBI and FS-ISAC", "Communicate with customers", "Restore from a selected recovery point", "Accept temporary reduced service"])
         owner = st.selectbox("Decision owner", ROLES); action = st.text_area("Chosen action")
@@ -68,7 +76,13 @@ with tabs[3]:
         if st.form_submit_button("Record decision") and action and residual:
             st.session_state.decisions.append(Decision(phase=phase, decision=decision, owner=owner, chosen_action=action, assumptions=assumptions, dissent=dissent, residual_risk=residual))
     st.dataframe([x.model_dump() for x in st.session_state.decisions], use_container_width=True)
-with tabs[4]:
+    decision_output = io.StringIO()
+    decision_writer = csv.DictWriter(decision_output, fieldnames=["synthetic_label", "phase", "decision", "owner", "chosen_action", "assumptions", "dissent", "residual_risk"])
+    decision_writer.writeheader()
+    for item in st.session_state.decisions:
+        decision_writer.writerow({"synthetic_label": SYNTHETIC_LABEL, **item.model_dump()})
+    st.download_button("Export decision log CSV", decision_output.getvalue(), "synthetic-exercise-decisions.csv", "text/csv")
+with tabs[5]:
     board = board_markdown(services, candidates, st.session_state.decisions)
     aar = after_action_markdown(st.session_state.participants, st.session_state.decisions)
     st.download_button("Download board packet (Markdown)", board, "board-packet.md")

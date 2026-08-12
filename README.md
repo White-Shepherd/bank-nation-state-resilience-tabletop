@@ -4,6 +4,10 @@
 
 An interactive four-hour executive tabletop and board risk framework translating cyber control-plane dependencies into customer, payment, liquidity, integrity, and recovery decisions.
 
+![Executive-level synthetic banking ecosystem](docs/images/high-level-banking-ecosystem.svg)
+
+The executive map starts with critical services, approved Tier 0 concentrations, principal owners, and major outside dependencies. Open the application for searchable progressive disclosure and synchronized detail panels.
+
 ## Business problem and audience
 
 A regional bank can appear available while its data is untrustworthy, or fail over quickly into the same compromised administrative plane. Board risk committees, executives, cyber and technology leaders, business continuity, payments, treasury, fraud, legal, compliance, communications, third-party risk, and incident commanders use this exercise to test those dilemmas without attack instructions.
@@ -30,6 +34,16 @@ The application selects participants, reveals evidence, logs decisions, assumpti
 ## Board value
 
 The board view connects services affected, tolerances consumed, Tier 0 exposure, payment and liquidity effects, integrity and recovery confidence, third parties, deadlines, residual risk, management actions, and board decisions. Red/amber/green is used only with published thresholds. Technical alert volume is excluded unless it supports a risk decision.
+
+## Interactive resilience ecosystem map
+
+The **Resilience Ecosystem Map** adds deterministic Board, Risk, Technical, Incident-command, and Recovery views; a critical-service explorer; RACI responsibility map; scenario animation; warning matrix; tool-coverage maturity; concentration and recovery-paradox views; investment comparisons; and accessible table fallbacks. See the [map guide](docs/ecosystem-map-guide.md), [legend](docs/visual-legend.md), and [interactive demonstration](docs/interactive-demo-script.md).
+
+![Technical wire-transfer dependency map](docs/images/wire-transfer-service-map.svg)
+
+Legend: square = service/process/application/data, hexagon = infrastructure, diamond = security capability, filled circle = internal player, outlined circle = external player; large thick-bordered nodes are Tier 0. Status always includes a text marker. Dashed edges indicate dependency, dotted edges monitoring/escalation, and dash-dot edges recovery. Static images are synthetic repository-safe views; the live app supplies zoom, filters, selection, phase state, details, and export.
+
+![Exercise state showing ambiguous pre-positioning](docs/images/exercise-state.png)
 
 ## Install and run
 
@@ -67,4 +81,3 @@ Kevin Bailey is a former U.S. Marine, PMP-certified product and program leader, 
 ## Safety and license
 
 No exploit code, intrusion procedure, real indicators, secrets, or customer data are included. See [SECURITY.md](SECURITY.md). MIT licensed.
-

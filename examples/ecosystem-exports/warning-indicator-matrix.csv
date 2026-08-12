@@ -1,0 +1,22 @@
+SYNTHETIC EXERCISE DATA - NOT A REAL BANK
+Signal,Data source,Tool,Monitoring team,Tier 0 dependency,Critical service,Escalation threshold,Possible benign cause
+Unusual privileged-role change,Identity audit log,SC-04,IP-09,IF-01,CBS-01,Any unapproved privileged change,Emergency maintenance
+New authentication method,Identity policy log,SC-04,IP-09,IF-01,CBS-01,Unapproved method on administrative account,Planned rollout
+Break-glass account use,Authentication log,SC-08,IP-08,IF-03,CBS-16,Any use without active incident approval,Authorized recovery test
+Certificate issuance anomaly,Certificate authority audit,SC-11,IP-09,IF-05,CBS-05,Unapproved administrative certificate,Renewal automation
+New outbound administrative destination,Network flow telemetry,SC-03,IP-08,IF-07,CBS-16,New destination plus administrative protocol,Vendor support session
+Cross-zone traffic change,Network flow telemetry,SC-03,IP-10,IF-07,CBS-05,Unapproved management-zone path,Routing failover
+Simultaneous carrier degradation,Carrier status and synthetic probes,SC-03,IP-10,IF-13,CBS-05,Two independent paths impaired for five minutes,Regional utility event
+Ledger reconciliation failure,Reconciliation control totals,SC-06,IP-15,AD-16,CBS-12,Any unexplained financial variance,Cutoff timing mismatch
+Unexpected replication behavior,Database replication audit,SC-07,IP-13,IF-10,CBS-03,Unapproved source target or lag reversal,Planned topology change
+Duplicate or missing transactions,Transaction journal,SC-06,IP-14,AD-14,CBS-05,Any unexplained duplicate or missing high-value transaction,Delayed acknowledgment
+Payment backlog growth,Payment queue metrics,SC-01,IP-14,AD-04,CBS-04,Service-specific maximum backlog reached,Cutoff-period volume
+Backup retention change,Backup audit log,SC-12,IP-18,IF-17,CBS-16,Any unapproved deletion retention or immutability change,Capacity maintenance
+Recovery job failure,Recovery orchestration log,SC-12,IP-18,IF-18,CBS-16,Critical-path job fails twice,Test data mismatch
+Monitoring source degradation,SIEM source health,SC-01,IP-08,IF-01,CBS-15,Ten percent of Tier 0 sources absent for five minutes,Collector maintenance
+Third-party status discrepancy,Provider portal and synthetic transaction probe,SC-15,IP-19,EP-02,CBS-05,Provider green while two independent probes fail,Status-page delay
+Customer login failure spike,Customer channel metrics,SC-01,IP-23,IF-01,CBS-01,Failure rate exceeds approved baseline for five minutes,Marketing-driven traffic spike
+Call-center volume spike,Contact-center metrics,SC-16,IP-23,IF-13,CBS-14,Two times seasonal baseline for ten minutes,Product campaign
+Public claim of altered balances,Public communications monitoring,SC-16,IP-22,AD-15,CBS-02,Material claim plus independent customer or control evidence,Disinformation or customer misunderstanding
+Cloud logging disabled,Cloud audit configuration,SC-09,IP-11,IF-08,CBS-09,Any unapproved disablement,Configuration deployment error
+Time synchronization anomaly,Independent time comparison,SC-13,IP-12,IF-06,CBS-11,Drift exceeds approved financial-event tolerance,Upstream clock failure
