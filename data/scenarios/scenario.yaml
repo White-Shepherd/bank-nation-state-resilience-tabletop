@@ -1,0 +1,7 @@
+label: SYNTHETIC EXERCISE DATA - NOT A REAL BANK
+institution: Harbor Ridge Bank
+profile: {$35B_assets: true, retail_customers: 1400000, branches: 140, operating_model: hybrid cloud and on-premises}
+strategic_context: Geopolitical conflict increases hostile activity against fictional U.S. financial infrastructure.
+attribution_rule: No single weak signal establishes nation-state attribution; confidence requires corroboration and government-sector coordination.
+phase_order: [strategic_warning, ambiguous_prepositioning, coordinated_disruption, integrity_uncertainty, containment_dilemma, recovery_restoration]
+

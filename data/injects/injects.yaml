@@ -1,0 +1,9 @@
+label: SYNTHETIC EXERCISE DATA - NOT A REAL BANK
+phases:
+  - {id: 0, duration_minutes: 30, inject_count: 4, tests: [posture, monitoring, change freeze, privilege review, backup validation, coordination]}
+  - {id: 1, duration_minutes: 40, inject_count: 5, tests: [correlation, escalation, declaration, preservation, hunting, Tier 0 protection]}
+  - {id: 2, duration_minutes: 45, inject_count: 6, tests: [crisis activation, service priority, workarounds, obligations, communications, authority]}
+  - {id: 3, duration_minutes: 45, inject_count: 5, tests: [availability versus integrity, suspension, authority, reconciliation, evidence, messaging]}
+  - {id: 4, duration_minutes: 40, inject_count: 5, tests: [acceptance, isolation, minimum viable banking, liquidity, escalation, board]}
+  - {id: 5, duration_minutes: 40, inject_count: 5, tests: [clean-room, sequencing, validation, reconciliation, restoration, monitoring, remediation]}
+

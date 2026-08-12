@@ -1,0 +1,9 @@
+synthetic_label,option,cost,effort,risk_reduction,dependencies,residual_risk,qualitative_rationale
+SYNTHETIC EXERCISE DATA - NOT A REAL BANK,Accept current risk,Low,Low,None,Explicit board acceptance,Material,Does not change likelihood or impact
+SYNTHETIC EXERCISE DATA - NOT A REAL BANK,Improve preventive controls,Medium,Medium,Medium,Identity and platform owners,Capable actors may bypass prevention,Reduces common entry and administrative abuse paths
+SYNTHETIC EXERCISE DATA - NOT A REAL BANK,Improve detection and response,Medium,Medium,Medium,Independent telemetry,Disruption may precede confident detection,Improves decision time and evidence quality
+SYNTHETIC EXERCISE DATA - NOT A REAL BANK,Build operational redundancy,High,High,High,Diverse providers and processes,Common modes may remain,Maintains minimum viable service
+SYNTHETIC EXERCISE DATA - NOT A REAL BANK,Build independent clean-room recovery,High,High,High,Independent credentials data and facilities,Recovery point may remain uncertain,Reduces recovery interference and control-plane dependence
+SYNTHETIC EXERCISE DATA - NOT A REAL BANK,Reduce third-party concentration,High,High,High,Commercial alternatives,Transition and correlated sector risk,Creates substitution choices
+SYNTHETIC EXERCISE DATA - NOT A REAL BANK,Transfer selected financial risk,Medium,Medium,Low,Insurance terms,Operational and confidence effects remain,Offsets only eligible loss
+SYNTHETIC EXERCISE DATA - NOT A REAL BANK,Discontinue or redesign vulnerable services,Variable,High,High,Business strategy,Customer and revenue effects,Removes or reshapes exposure

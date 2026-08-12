@@ -1,0 +1,109 @@
+# SYNTHETIC EXERCISE DATA - NOT A REAL BANK
+- &base
+  id: CBS-01
+  name: Customer authentication
+  owner: Digital Banking
+  dependencies: [enterprise-identity, authoritative-dns, certificate-keys, carrier-diversity, security-monitoring]
+  tolerance: &tol
+    mtd_minutes: 120
+    rto_minutes: 60
+    rpo_minutes: 5
+    minimum_service_pct: 60
+    max_data_uncertainty_minutes: 5
+    max_backlog: 10000
+    customer_harm_threshold: 10000 customers unable to authenticate
+    financial_loss_threshold_usd: 500000
+    liquidity_consequence: Deposit movement visibility degrades
+    regulatory_consequence: Customer harm and operational incident review
+    manual_workaround_minutes: 30
+- <<: *base
+  id: CBS-02
+  name: Account balance and transaction inquiry
+  owner: Deposit Operations
+  dependencies: [core-banking, enterprise-identity, authoritative-dns, reconciliation-data]
+  tolerance: {<<: *tol, mtd_minutes: 240, rto_minutes: 90, max_data_uncertainty_minutes: 15}
+- <<: *base
+  id: CBS-03
+  name: Core deposit processing
+  owner: Deposit Operations
+  dependencies: [core-banking, enterprise-identity, privileged-access, certificate-keys, reconciliation-data, backup-control, recovery-orchestration]
+  tolerance: {<<: *tol, mtd_minutes: 120, rto_minutes: 60, rpo_minutes: 0, max_data_uncertainty_minutes: 0, max_backlog: 5000}
+- <<: *base
+  id: CBS-04
+  name: ACH
+  owner: Payments Operations
+  dependencies: [payment-processing, core-banking, enterprise-identity, certificate-keys, carrier-diversity, reconciliation-data]
+  tolerance: {<<: *tol, mtd_minutes: 60, rto_minutes: 30, rpo_minutes: 0, max_data_uncertainty_minutes: 0, max_backlog: 2000}
+- <<: *base
+  id: CBS-05
+  name: Wire transfers
+  owner: Payments Operations
+  dependencies: [payment-processing, enterprise-identity, privileged-access, certificate-keys, carrier-diversity, reconciliation-data]
+  tolerance: {<<: *tol, mtd_minutes: 30, rto_minutes: 15, rpo_minutes: 0, max_data_uncertainty_minutes: 0, max_backlog: 100}
+- <<: *base
+  id: CBS-06
+  name: Card authorization
+  owner: Card Operations
+  dependencies: [payment-processing, processor-northstar, carrier-diversity, authoritative-dns, certificate-keys]
+  tolerance: {<<: *tol, mtd_minutes: 15, rto_minutes: 10, rpo_minutes: 0, max_backlog: 5000, minimum_service_pct: 80}
+- <<: *base
+  id: CBS-07
+  name: Card clearing and settlement
+  owner: Card Operations
+  dependencies: [payment-processing, processor-northstar, general-ledger, reconciliation-data]
+  tolerance: {<<: *tol, mtd_minutes: 240, rto_minutes: 120, rpo_minutes: 0, max_backlog: 20000}
+- <<: *base
+  id: CBS-08
+  name: ATM withdrawals
+  owner: Retail Operations
+  dependencies: [payment-processing, processor-northstar, carrier-diversity, enterprise-identity]
+  tolerance: {<<: *tol, mtd_minutes: 60, rto_minutes: 30, max_backlog: 3000}
+- <<: *base
+  id: CBS-09
+  name: Treasury-management services
+  owner: Commercial Banking
+  dependencies: [enterprise-identity, payment-processing, core-banking, carrier-diversity, certificate-keys]
+  tolerance: {<<: *tol, mtd_minutes: 60, rto_minutes: 30, rpo_minutes: 0, max_backlog: 500}
+- <<: *base
+  id: CBS-10
+  name: Fraud monitoring
+  owner: Fraud Risk
+  dependencies: [security-monitoring, transaction-data-feed, enterprise-identity, time-service]
+  tolerance: {<<: *tol, mtd_minutes: 30, rto_minutes: 15, max_backlog: 10000}
+- <<: *base
+  id: CBS-11
+  name: Liquidity-position reporting
+  owner: Treasury
+  dependencies: [general-ledger, core-banking, payment-processing, reconciliation-data, time-service]
+  tolerance: {<<: *tol, mtd_minutes: 30, rto_minutes: 15, rpo_minutes: 0, max_data_uncertainty_minutes: 0, max_backlog: 50}
+- <<: *base
+  id: CBS-12
+  name: General ledger
+  owner: Finance
+  dependencies: [general-ledger, enterprise-identity, privileged-access, reconciliation-data, backup-control]
+  tolerance: {<<: *tol, mtd_minutes: 120, rto_minutes: 60, rpo_minutes: 0, max_data_uncertainty_minutes: 0, max_backlog: 1000}
+- <<: *base
+  id: CBS-13
+  name: Regulatory reporting
+  owner: Regulatory Reporting
+  dependencies: [general-ledger, core-banking, reconciliation-data, enterprise-identity]
+  tolerance: {<<: *tol, mtd_minutes: 480, rto_minutes: 240, max_data_uncertainty_minutes: 0, max_backlog: 100}
+- <<: *base
+  id: CBS-14
+  name: Customer communications
+  owner: Communications
+  dependencies: [authoritative-dns, carrier-diversity, crisis-communications, enterprise-identity]
+  tolerance: {<<: *tol, mtd_minutes: 30, rto_minutes: 15, max_backlog: 1000}
+- <<: *base
+  id: CBS-15
+  name: Incident coordination
+  owner: Incident Commander
+  dependencies: [crisis-communications, security-monitoring, enterprise-identity, carrier-diversity, time-service]
+  tolerance: {<<: *tol, mtd_minutes: 15, rto_minutes: 10, max_backlog: 50}
+- <<: *base
+  id: CBS-16
+  name: Technology recovery
+  owner: Technology Resilience
+  dependencies: [backup-control, recovery-orchestration, privileged-access, enterprise-identity, cloud-admin, network-management, certificate-keys, time-service]
+  tolerance: {<<: *tol, mtd_minutes: 60, rto_minutes: 30, rpo_minutes: 15, max_backlog: 100}
+
