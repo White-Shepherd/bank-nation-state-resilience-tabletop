@@ -1,0 +1,118 @@
+synthetic_label: SYNTHETIC EXERCISE DATA - NOT A REAL BANK
+defaults: &r {description: Declared synthetic dependency, criticality: important, confidence: medium, evidence: Synthetic dependency workshop rationale, normal_state: Required for intended service operation, incident_state: Validate availability and integrity before continued use, recovery_state: Restore only after prerequisites and owner validation, propagation: false}
+relationships:
+  # Service to process
+  - {<<: *r, id: R-001, source: CBS-01, destination: BP-08, relationship_type: depends_on, description: Authentication depends on customer verification, criticality: critical, confidence: high}
+  - {<<: *r, id: R-002, source: CBS-02, destination: BP-08, relationship_type: depends_on, description: Inquiry requires verified customer context}
+  - {<<: *r, id: R-003, source: CBS-03, destination: BP-05, relationship_type: depends_on, description: Deposit processing requires transaction posting, criticality: critical, confidence: high}
+  - {<<: *r, id: R-004, source: CBS-04, destination: BP-01, relationship_type: depends_on, description: ACH requires payment initiation}
+  - {<<: *r, id: R-005, source: CBS-04, destination: BP-02, relationship_type: depends_on, description: ACH requires approval, criticality: critical}
+  - {<<: *r, id: R-006, source: CBS-05, destination: BP-01, relationship_type: depends_on, description: Wires require initiation, criticality: critical, confidence: high}
+  - {<<: *r, id: R-007, source: CBS-05, destination: BP-02, relationship_type: depends_on, description: Wires require dual approval, criticality: critical, confidence: high}
+  - {<<: *r, id: R-008, source: CBS-05, destination: BP-03, relationship_type: depends_on, description: Wires require sanctions screening, criticality: critical}
+  - {<<: *r, id: R-009, source: CBS-05, destination: BP-04, relationship_type: depends_on, description: Wires require risk-based fraud review}
+  - {<<: *r, id: R-010, source: CBS-06, destination: BP-04, relationship_type: depends_on, description: Card authorization consumes fraud decision}
+  - {<<: *r, id: R-011, source: CBS-07, destination: BP-06, relationship_type: depends_on, description: Card settlement requires reconciliation, criticality: critical}
+  - {<<: *r, id: R-012, source: CBS-08, destination: AD-07, relationship_type: depends_on, description: ATM withdrawals depend on card management}
+  - {<<: *r, id: R-013, source: CBS-09, destination: BP-01, relationship_type: depends_on, description: Treasury services initiate commercial payments}
+  - {<<: *r, id: R-014, source: CBS-10, destination: BP-04, relationship_type: depends_on, description: Fraud monitoring enables fraud review, criticality: critical}
+  - {<<: *r, id: R-015, source: CBS-11, destination: BP-07, relationship_type: depends_on, description: Liquidity reporting requires liquidity calculation, criticality: critical}
+  - {<<: *r, id: R-016, source: CBS-12, destination: BP-05, relationship_type: depends_on, description: General ledger receives transaction postings, criticality: critical}
+  - {<<: *r, id: R-017, source: CBS-13, destination: AD-13, relationship_type: depends_on, description: Reporting depends on reporting platform}
+  - {<<: *r, id: R-018, source: CBS-14, destination: BP-11, relationship_type: depends_on, description: Communications require notification process}
+  - {<<: *r, id: R-019, source: CBS-15, destination: BP-12, relationship_type: depends_on, description: Coordination requires escalation process, criticality: critical}
+  - {<<: *r, id: R-020, source: CBS-16, destination: BP-13, relationship_type: depends_on, description: Recovery requires authorization, criticality: critical}
+  # Process to applications/data
+  - {<<: *r, id: R-021, source: BP-08, destination: AD-09, relationship_type: depends_on, description: Verification uses customer identity platform, criticality: critical}
+  - {<<: *r, id: R-022, source: BP-05, destination: AD-01, relationship_type: depends_on, description: Posting uses core banking platform, criticality: critical, propagation: true, trigger: Core banking unavailable or integrity untrusted, effect: Deposit and payment posting pauses, assumptions: No validated alternate posting engine, compensating_control: Controlled manual transaction queue}
+  - {<<: *r, id: R-023, source: BP-05, destination: AD-14, relationship_type: provides_data_to, description: Posting writes immutable sequence to journal, criticality: critical}
+  - {<<: *r, id: R-024, source: BP-01, destination: AD-04, relationship_type: depends_on, description: Initiation traverses payment gateway, criticality: critical}
+  - {<<: *r, id: R-025, source: BP-02, destination: AD-06, relationship_type: depends_on, description: Wire approval is recorded by wire platform, criticality: critical}
+  - {<<: *r, id: R-026, source: BP-03, destination: AD-06, relationship_type: depends_on, description: Screening decision gates wire release}
+  - {<<: *r, id: R-027, source: BP-04, destination: AD-08, relationship_type: depends_on, description: Fraud review consumes analytics, criticality: critical}
+  - {<<: *r, id: R-028, source: BP-06, destination: AD-16, relationship_type: depends_on, description: Reconciliation uses independent reconciliation data, criticality: critical, propagation: true, trigger: Reconciliation data unavailable or inconsistent, effect: Settlement and restoration confidence falls, assumptions: No equivalent independent record, compensating_control: Counterparty and journal reconciliation}
+  - {<<: *r, id: R-029, source: BP-07, destination: AD-10, relationship_type: depends_on, description: Liquidity calculation uses general ledger, criticality: critical}
+  - {<<: *r, id: R-030, source: BP-10, destination: AD-14, relationship_type: provides_data_to, description: Manual payments must preserve controlled journal}
+  - {<<: *r, id: R-031, source: BP-11, destination: AD-12, relationship_type: depends_on, description: Notification uses communications platform}
+  - {<<: *r, id: R-032, source: BP-13, destination: AD-17, relationship_type: validates, description: Recovery authorization checks approved configuration baseline, criticality: critical}
+  # Application to infrastructure
+  - {<<: *r, id: R-033, source: AD-01, destination: IF-02, relationship_type: depends_on, description: Core administration uses enterprise directory, criticality: critical, propagation: true, trigger: Directory trust is unavailable, effect: Core administration and controlled recovery are blocked, assumptions: Independent recovery credentials not yet invoked, compensating_control: Clean-room identity}
+  - {<<: *r, id: R-034, source: AD-01, destination: IF-10, relationship_type: depends_on, description: Core data is operated through database management plane, criticality: critical}
+  - {<<: *r, id: R-035, source: AD-02, destination: IF-11, relationship_type: depends_on, description: Online banking uses API gateway}
+  - {<<: *r, id: R-036, source: AD-03, destination: IF-11, relationship_type: depends_on, description: Mobile banking uses API gateway}
+  - {<<: *r, id: R-037, source: AD-04, destination: IF-05, relationship_type: depends_on, description: Gateway trusts certificates and keys, criticality: critical}
+  - {<<: *r, id: R-038, source: AD-04, destination: IF-13, relationship_type: depends_on, description: Gateway requires external connectivity, criticality: critical, propagation: true, trigger: Telecommunications paths unavailable, effect: Multiple payment channels cannot exchange messages, assumptions: Both modeled carriers affected, compensating_control: Manual channel and alternate carrier}
+  - {<<: *r, id: R-039, source: AD-05, destination: IF-11, relationship_type: depends_on, description: ACH platform exchanges approved messages through API gateway}
+  - {<<: *r, id: R-040, source: AD-06, destination: IF-01, relationship_type: depends_on, description: Wire users and administrators authenticate through enterprise identity, criticality: critical, propagation: true, trigger: Identity compromise or loss, effect: Wire access is suspended pending alternate authentication, confidence: high, assumptions: Identity cannot be trusted, compensating_control: Independently authenticated manual payment procedure}
+  - {<<: *r, id: R-041, source: AD-06, destination: IF-03, relationship_type: depends_on, description: Wire administration uses privileged access, criticality: critical}
+  - {<<: *r, id: R-042, source: AD-07, destination: IF-13, relationship_type: depends_on, description: Card platform requires carrier connectivity}
+  - {<<: *r, id: R-043, source: AD-08, destination: IF-06, relationship_type: depends_on, description: Fraud analytics requires trustworthy event time}
+  - {<<: *r, id: R-044, source: AD-09, destination: IF-01, relationship_type: depends_on, description: Customer identity federates with enterprise identity, criticality: critical}
+  - {<<: *r, id: R-045, source: AD-10, destination: IF-10, relationship_type: depends_on, description: Ledger uses database management plane, criticality: critical}
+  - {<<: *r, id: R-046, source: AD-12, destination: IF-04, relationship_type: depends_on, description: Communications platform requires DNS}
+  - {<<: *r, id: R-047, source: AD-14, destination: IF-17, relationship_type: recovers, description: Transaction journal is protected by backup platform, criticality: critical}
+  - {<<: *r, id: R-048, source: AD-15, destination: IF-17, relationship_type: recovers, description: Account database is protected by backup platform, criticality: critical}
+  - {<<: *r, id: R-049, source: AD-16, destination: IF-19, relationship_type: recovers, description: Reconciliation data is validated in clean room, criticality: critical}
+  - {<<: *r, id: R-050, source: IF-17, destination: IF-01, relationship_type: depends_on, description: Production backup administration shares enterprise identity, criticality: critical, propagation: true, trigger: Production identity is compromised, effect: Backup control is treated as untrusted, confidence: high, assumptions: Independent credential break is incomplete, compensating_control: Offline copies and clean-room credentials}
+  - {<<: *r, id: R-051, source: IF-18, destination: IF-04, relationship_type: depends_on, description: Recovery orchestration resolves production DNS, criticality: critical, propagation: true, trigger: Production DNS unavailable or corrupted, effect: Automated recovery jobs fail or target wrong endpoints, assumptions: Alternate hosts file not validated, compensating_control: Independent recovery DNS}
+  - {<<: *r, id: R-052, source: IF-18, destination: IF-17, relationship_type: depends_on, description: Orchestration consumes backup catalog, criticality: critical}
+  - {<<: *r, id: R-053, source: IF-19, destination: IF-18, relationship_type: fails_over_to, description: Recovery orchestration deploys into clean room, criticality: critical}
+  - {<<: *r, id: R-054, source: IF-14, destination: IF-15, relationship_type: fails_over_to, description: Primary facility has declared secondary recovery target}
+  - {<<: *r, id: R-055, source: IF-15, destination: IF-19, relationship_type: fails_over_to, description: Untrusted secondary recovery can escalate to clean room}
+  # Security monitoring and protection
+  - {<<: *r, id: R-056, source: SC-01, destination: IF-01, relationship_type: monitors, description: SIEM receives identity audit events, criticality: critical}
+  - {<<: *r, id: R-057, source: SC-01, destination: IF-07, relationship_type: monitors, description: SIEM receives network control changes}
+  - {<<: *r, id: R-058, source: SC-02, destination: IF-03, relationship_type: protects, description: Endpoint telemetry covers privileged workstations}
+  - {<<: *r, id: R-059, source: SC-03, destination: IF-13, relationship_type: monitors, description: Network detection monitors carrier and zone traffic}
+  - {<<: *r, id: R-060, source: SC-04, destination: IF-01, relationship_type: monitors, description: Identity threat detection analyzes role policy and authentication change, criticality: critical}
+  - {<<: *r, id: R-061, source: SC-05, destination: AD-08, relationship_type: protects, description: Fraud detection supplies analytics and cases}
+  - {<<: *r, id: R-062, source: SC-06, destination: AD-14, relationship_type: monitors, description: Integrity monitoring compares transaction journal, criticality: critical}
+  - {<<: *r, id: R-063, source: SC-06, destination: AD-16, relationship_type: validates, description: Integrity monitoring validates reconciliation totals, criticality: critical}
+  - {<<: *r, id: R-064, source: SC-07, destination: IF-10, relationship_type: monitors, description: Database monitoring observes privileged activity}
+  - {<<: *r, id: R-065, source: SC-08, destination: IF-03, relationship_type: monitors, description: Session monitoring records privileged access, criticality: critical}
+  - {<<: *r, id: R-066, source: SC-09, destination: IF-08, relationship_type: monitors, description: Cloud security monitors control-plane changes}
+  - {<<: *r, id: R-067, source: SC-11, destination: IF-05, relationship_type: monitors, description: Certificate monitoring validates issuance and trust}
+  - {<<: *r, id: R-068, source: SC-12, destination: IF-17, relationship_type: validates, description: Backup validation tests immutability integrity and restoration, criticality: critical}
+  - {<<: *r, id: R-069, source: SC-13, destination: IF-07, relationship_type: monitors, description: Configuration monitoring detects management drift}
+  - {<<: *r, id: R-070, source: SC-14, destination: EP-15, relationship_type: provides_data_to, description: Sector intelligence informs defensive posture}
+  - {<<: *r, id: R-071, source: SC-15, destination: IP-07, relationship_type: provides_data_to, description: Case management provides evidence to incident command}
+  - {<<: *r, id: R-072, source: SC-16, destination: EP-20, relationship_type: monitors, description: Communications monitoring observes public claims}
+  - {<<: *r, id: R-073, source: SC-17, destination: AD-02, relationship_type: monitors, description: External monitoring observes synthetic customer channel exposure}
+  # Ownership, operation and approvals
+  - {<<: *r, id: R-074, source: IP-09, destination: IF-01, relationship_type: operates, description: Identity team operates identity provider, criticality: critical, confidence: high}
+  - {<<: *r, id: R-075, source: IP-10, destination: IF-07, relationship_type: operates, description: Network team operates management plane}
+  - {<<: *r, id: R-076, source: IP-11, destination: IF-08, relationship_type: operates, description: Cloud team operates cloud management}
+  - {<<: *r, id: R-077, source: IP-12, destination: IF-09, relationship_type: operates, description: Infrastructure team operates virtualization}
+  - {<<: *r, id: R-078, source: IP-13, destination: AD-01, relationship_type: operates, description: Application owners operate core platform}
+  - {<<: *r, id: R-079, source: IP-14, destination: CBS-05, relationship_type: operates, description: Payment operations operates wire service, criticality: critical}
+  - {<<: *r, id: R-080, source: IP-15, destination: CBS-11, relationship_type: owns, description: Treasury owns liquidity reporting}
+  - {<<: *r, id: R-081, source: IP-16, destination: CBS-10, relationship_type: owns, description: Fraud operations owns fraud monitoring}
+  - {<<: *r, id: R-082, source: IP-18, destination: IF-19, relationship_type: operates, description: Disaster recovery operates clean room, criticality: critical}
+  - {<<: *r, id: R-083, source: IP-04, destination: IP-07, relationship_type: escalates_to, description: CISO escalates cyber evidence to incident commander}
+  - {<<: *r, id: R-084, source: IP-07, destination: IP-02, relationship_type: escalates_to, description: Incident commander escalates material business decisions to CEO}
+  - {<<: *r, id: R-085, source: IP-02, destination: IP-01, relationship_type: reports_to, description: CEO reports residual risk and investment decisions to board}
+  - {<<: *r, id: R-086, source: IP-06, destination: BP-10, relationship_type: approves, description: COO approves manual payment activation, criticality: critical}
+  - {<<: *r, id: R-087, source: IP-05, destination: BP-13, relationship_type: approves, description: CIO approves technical recovery authorization, criticality: critical}
+  - {<<: *r, id: R-088, source: IP-03, destination: IP-01, relationship_type: reports_to, description: CRO reports appetite and concentration exposure}
+  # External dependencies and communication
+  - {<<: *r, id: R-089, source: EP-01, destination: AD-01, relationship_type: supplies, description: Fictional provider supplies core banking platform}
+  - {<<: *r, id: R-090, source: EP-02, destination: AD-04, relationship_type: supplies, description: Fictional processor supplies external payment exchange, criticality: critical, propagation: true, trigger: Processor service unavailable, effect: Multiple payment services degrade, assumptions: Substitution is not immediate, compensating_control: Manual and alternate correspondent procedures}
+  - {<<: *r, id: R-091, source: EP-03, destination: IF-16, relationship_type: supplies, description: Fictional cloud provider supplies cloud region}
+  - {<<: *r, id: R-092, source: EP-04, destination: IF-13, relationship_type: supplies, description: Fictional carriers supply connectivity, criticality: critical}
+  - {<<: *r, id: R-093, source: EP-07, destination: CBS-06, relationship_type: supplies, description: Card networks provide authorization and settlement connectivity}
+  - {<<: *r, id: R-094, source: EP-08, destination: CBS-04, relationship_type: supplies, description: ACH operator exchanges ACH files}
+  - {<<: *r, id: R-095, source: EP-09, destination: CBS-05, relationship_type: supplies, description: Correspondent banks support settlement and liquidity}
+  - {<<: *r, id: R-096, source: IP-21, destination: EP-10, relationship_type: communicates_with, description: Compliance coordinates jurisdiction-dependent notification with legal review}
+  - {<<: *r, id: R-097, source: IP-20, destination: EP-11, relationship_type: communicates_with, description: Legal coordinates appropriate law-enforcement contact}
+  - {<<: *r, id: R-098, source: IP-04, destination: EP-12, relationship_type: communicates_with, description: CISO coordinates defensive support with CISA}
+  - {<<: *r, id: R-099, source: IP-20, destination: EP-13, relationship_type: communicates_with, description: Legal coordinates FBI contact}
+  - {<<: *r, id: R-100, source: IP-15, destination: EP-14, relationship_type: communicates_with, description: Treasury coordinates relevant financial-sector support}
+  - {<<: *r, id: R-101, source: IP-04, destination: EP-15, relationship_type: communicates_with, description: CISO shares and receives sector intelligence}
+  - {<<: *r, id: R-102, source: IP-22, destination: EP-19, relationship_type: communicates_with, description: Communications and support inform customers}
+  - {<<: *r, id: R-103, source: IP-22, destination: EP-20, relationship_type: communicates_with, description: Communications provides verified public statements}
+  - {<<: *r, id: R-104, source: EP-10, destination: CBS-13, relationship_type: regulates, description: Applicable regulators oversee reporting subject to legal review}
+  # Explicit dependency cycle for detection and display
+  - {<<: *r, id: R-105, source: IF-04, destination: IF-02, relationship_type: depends_on, description: Production DNS administration authenticates through directory}
+  - {<<: *r, id: R-106, source: IF-02, destination: IF-04, relationship_type: depends_on, description: Directory service discovery depends on DNS}
+  - {<<: *r, id: R-107, source: AD-01, destination: CBS-03, relationship_type: supports, description: Core platform supports core deposit processing, criticality: critical, confidence: high}
+  - {<<: *r, id: R-108, source: IP-09, destination: IF-01, relationship_type: administers, description: Identity team administers enterprise identity under privileged controls, criticality: critical, confidence: high}

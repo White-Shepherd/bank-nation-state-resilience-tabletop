@@ -1,0 +1,24 @@
+synthetic_label: SYNTHETIC EXERCISE DATA - NOT A REAL BANK
+phase_names: [Normal operations, Strategic warning, Ambiguous pre-positioning, Coordinated disruption, Integrity uncertainty, Containment dilemma, Recovery, Post-incident stabilization]
+states:
+  - {phase: 0, node_id: CBS-05, status: normal}
+  - {phase: 1, node_id: SC-14, status: warning, indicator_ids: [], decision: Raise threat posture, deadline_minutes: 30}
+  - {phase: 2, node_id: IF-01, status: warning, indicator_ids: [WI-01, WI-02], decision: Freeze privileged changes, deadline_minutes: 15}
+  - {phase: 2, node_id: IF-05, status: warning, indicator_ids: [WI-04], decision: Validate certificate issuance, deadline_minutes: 20}
+  - {phase: 2, node_id: IF-17, status: degraded, indicator_ids: [WI-12], decision: Protect independent backup copies, deadline_minutes: 15}
+  - {phase: 3, node_id: CBS-01, status: failed, indicator_ids: [WI-16], decision: Activate crisis management, deadline_minutes: 10}
+  - {phase: 3, node_id: CBS-04, status: degraded, indicator_ids: [WI-11], decision: Activate manual ACH procedure, deadline_minutes: 20}
+  - {phase: 3, node_id: CBS-05, status: degraded, indicator_ids: [WI-07], decision: Prioritize settlement obligations, deadline_minutes: 10}
+  - {phase: 3, node_id: EP-02, status: degraded, indicator_ids: [WI-15], decision: Validate provider status and substitution, deadline_minutes: 20}
+  - {phase: 3, node_id: SC-05, status: failed, indicator_ids: [], decision: Apply compensating fraud review, deadline_minutes: 15}
+  - {phase: 4, node_id: CBS-12, status: degraded, indicator_ids: [WI-08], decision: Suspend uncertain posting, deadline_minutes: 10}
+  - {phase: 4, node_id: AD-16, status: degraded, indicator_ids: [WI-08], decision: Determine authoritative records, deadline_minutes: 15}
+  - {phase: 4, node_id: AD-15, status: unknown, indicator_ids: [WI-18], decision: Reconcile customer balances, deadline_minutes: 20}
+  - {phase: 5, node_id: IF-01, status: failed, indicator_ids: [WI-01, WI-02], decision: Isolate production identity, deadline_minutes: 10}
+  - {phase: 5, node_id: IF-17, status: unknown, indicator_ids: [WI-12], decision: Do not trust production-administered recovery, deadline_minutes: 10, recovery_prerequisite: Validate offline copy with independent identity}
+  - {phase: 5, node_id: CBS-05, status: failed, indicator_ids: [WI-10], decision: Invoke controlled manual wires, deadline_minutes: 10}
+  - {phase: 6, node_id: IF-19, status: restored, indicator_ids: [], decision: Begin clean-room recovery, deadline_minutes: 30, recovery_prerequisite: Independent credentials network DNS time and validated data}
+  - {phase: 6, node_id: AD-16, status: restored, indicator_ids: [WI-08], decision: Validate reconciliation before posting, deadline_minutes: 30, recovery_prerequisite: Independent journal and counterparty totals agree}
+  - {phase: 6, node_id: CBS-05, status: degraded, indicator_ids: [WI-10], decision: Restore minimum viable wire service, deadline_minutes: 30, recovery_prerequisite: Identity integrity and payment reconciliation validated}
+  - {phase: 7, node_id: CBS-05, status: restored, indicator_ids: [], decision: Continue heightened monitoring, deadline_minutes: 60}
+  - {phase: 7, node_id: CBS-12, status: restored, indicator_ids: [], decision: Complete backlog reconciliation, deadline_minutes: 120}

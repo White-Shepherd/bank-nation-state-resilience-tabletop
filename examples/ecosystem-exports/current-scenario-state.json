@@ -1,0 +1,41 @@
+{
+  "synthetic_label": "SYNTHETIC EXERCISE DATA - NOT A REAL BANK",
+  "phase": 5,
+  "node_states": [
+    {
+      "phase": 5,
+      "node_id": "IF-01",
+      "status": "failed",
+      "indicator_ids": [
+        "WI-01",
+        "WI-02"
+      ],
+      "decision": "Isolate production identity",
+      "deadline_minutes": 10,
+      "recovery_prerequisite": ""
+    },
+    {
+      "phase": 5,
+      "node_id": "IF-17",
+      "status": "unknown",
+      "indicator_ids": [
+        "WI-12"
+      ],
+      "decision": "Do not trust production-administered recovery",
+      "deadline_minutes": 10,
+      "recovery_prerequisite": "Validate offline copy with independent identity"
+    },
+    {
+      "phase": 5,
+      "node_id": "CBS-05",
+      "status": "failed",
+      "indicator_ids": [
+        "WI-10"
+      ],
+      "decision": "Invoke controlled manual wires",
+      "deadline_minutes": 10,
+      "recovery_prerequisite": ""
+    }
+  ],
+  "decisions": []
+}
